@@ -1,9 +1,12 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Login - MLM</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase CDN Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 </head>
 <body>
   <div class="login-box">
@@ -11,8 +14,52 @@
     <input type="text" placeholder="Enter email" id="email">
     <input type="password" placeholder="Enter password" id="password">
     <button onclick="login()">Login</button>
+    <button onclick="signup()">Signup</button>
+    <p id="message"></p>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.appspot.com",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Login Function
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          document.getElementById("message").innerText = "✅ Login successful!";
+        })
+        .catch((error) => {
+          document.getElementById("message").innerText = "❌ " + error.message;
+        });
+    }
+
+    // Signup Function
+    function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          document.getElementById("message").innerText = "✅ Signup successful!";
+        })
+        .catch((error) => {
+          document.getElementById("message").innerText = "❌ " + error.message;
+        });
+    }
+  </script>
 </body>
 </html>

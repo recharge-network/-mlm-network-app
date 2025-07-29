@@ -4,12 +4,55 @@
   <title>Login - MLM</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase CDN -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <!-- Firebase CDN (v9 modular style) -->
+  <script type="module">
+    // Import modules directly (modular syntax)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.appspot.com",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Attach functions globally
+    window.login = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          document.getElementById("message").innerText = "✅ Login successful!";
+        })
+        .catch((error) => {
+          document.getElementById("message").innerText = "❌ " + error.message;
+        });
+    };
+
+    window.signup = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          document.getElementById("message").innerText = "✅ Signup successful!";
+        })
+        .catch((error) => {
+          document.getElementById("message").innerText = "❌ " + error.message;
+        });
+    };
+  </script>
 
   <style>
-    /* Agar aapka style.css load nahi ho raha to basic style yeh raha */
     body {
       background: #f0f0f0;
       font-family: Arial;
@@ -64,51 +107,11 @@
     <h2>Login / Signup</h2>
     <input type="text" placeholder="Enter email" id="email">
     <input type="password" placeholder="Enter password" id="password">
-    
+
     <button onclick="login()">Login</button>
     <button onclick="signup()">Signup</button>
 
     <p id="message"></p>
   </div>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl",
-      authDomain: "mlm-network-157e8.firebaseapp.com",
-      projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.appspot.com",
-      messagingSenderId: "433192039581",
-      appId: "1:433192039581:web:42d02b965870"
-    };
-
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          document.getElementById("message").innerText = "✅ Login successful!";
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
-    }
-
-    function signup() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          document.getElementById("message").innerText = "✅ Signup successful!";
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
-    }
-  </script>
 </body>
 </html>

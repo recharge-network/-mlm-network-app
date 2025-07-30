@@ -9,52 +9,54 @@
       font-family: Arial;
       margin: 0;
       padding: 0;
-      background-color: #f0f2f5;
+      background-color: #f4f6f9;
     }
     .top-bar {
-      text-align: right;
-      padding: 10px 20px;
       background-color: #fff;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      padding: 10px 20px;
+      text-align: right;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .dashboard {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 40px auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 20px;
+      padding: 0 20px;
     }
     .card {
       background: white;
-      padding: 20px;
+      padding: 15px;
+      border-radius: 12px;
       text-align: center;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ccc;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       text-decoration: none;
-      color: black;
-      transition: 0.3s;
+      color: #222;
+      transition: transform 0.2s;
     }
     .card:hover {
       transform: scale(1.05);
-      background: #f0f8ff;
+      background-color: #f0f8ff;
     }
     .icon-img {
       width: 50px;
       height: 50px;
+      background: white;
       padding: 10px;
-      background-color: white;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      margin-bottom: 10px;
       object-fit: contain;
-      transition: transform 0.3s;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
     }
     .icon-img:hover {
+      filter: drop-shadow(0 0 3px red) drop-shadow(0 0 3px blue);
       transform: scale(1.1);
-      filter: drop-shadow(0 0 4px #007BFF) drop-shadow(0 0 4px #dc3545);
     }
     #user-email {
       font-size: 14px;
-      margin-right: 10px;
+      margin-right: 15px;
       color: green;
     }
   </style>
@@ -69,82 +71,62 @@
   <h2 style="text-align:center;">Welcome to Your Dashboard</h2>
 
   <div class="dashboard">
-
+    <!-- Service Cards -->
     <a href="services/recharge.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3103/3103451.png" class="icon-img" alt="Recharge">
-      Recharge
+      <img src="https://cdn-icons-png.flaticon.com/512/3103/3103451.png" class="icon-img" alt="Recharge"> Recharge
     </a>
 
     <a href="services/bill-payment.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3771/3771380.png" class="icon-img" alt="Bill Payment">
-      Bill Payment
+      <img src="https://cdn-icons-png.flaticon.com/512/3771/3771380.png" class="icon-img" alt="Bill Payment"> Bill Payment
     </a>
 
     <a href="services/money-transfer.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3271/3271334.png" class="icon-img" alt="Money Transfer">
-      Money Transfer
+      <img src="https://cdn-icons-png.flaticon.com/512/3271/3271334.png" class="icon-img" alt="Money Transfer"> Money Transfer
     </a>
 
     <a href="services/dth-recharge.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" class="icon-img" alt="DTH Recharge">
-      DTH Recharge
+      <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" class="icon-img" alt="DTH"> DTH Recharge
     </a>
 
     <a href="services/aeps.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/4762/4762316.png" class="icon-img" alt="AEPS">
-      AEPS
-    </a>
-
-    <a href="services/credit-card.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" class="icon-img" alt="Credit Card">
-      Credit Card
-    </a>
-
-    <a href="services/account-opening.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2983/2983067.png" class="icon-img" alt="Account Opening">
-      Account Opening
-    </a>
-
-    <a href="services/balance-enquiry.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/4701/4701522.png" class="icon-img" alt="Balance Enquiry">
-      Balance Enquiry
-    </a>
-
-    <a href="services/mini-statement.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2803/2803677.png" class="icon-img" alt="Mini Statement">
-      Mini Statement
-    </a>
-
-    <a href="services/cash-withdrawal.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/9286/9286958.png" class="icon-img" alt="Cash Withdrawal">
-      Cash Withdrawal
+      <img src="https://cdn-icons-png.flaticon.com/512/4762/4762316.png" class="icon-img" alt="AEPS"> AEPS Withdraw
     </a>
 
     <a href="services/cash-deposit.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/9286/9286910.png" class="icon-img" alt="Cash Deposit">
-      Cash Deposit
+      <img src="https://cdn-icons-png.flaticon.com/512/9286/9286910.png" class="icon-img" alt="Deposit"> AEPS Deposit
     </a>
 
-    <a href="services/debit-link.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/6229/6229827.png" class="icon-img" alt="Debit Link">
-      Debit Link
+    <a href="services/mini-statement.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2803/2803677.png" class="icon-img" alt="Mini Statement"> Mini Statement
+    </a>
+
+    <a href="services/balance-enquiry.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/4701/4701522.png" class="icon-img" alt="Balance"> Balance Enquiry
+    </a>
+
+    <a href="services/credit-card.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" class="icon-img" alt="Credit Card"> Credit Card
+    </a>
+
+    <a href="services/account-opening.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2983/2983067.png" class="icon-img" alt="Account Opening"> Account Opening
     </a>
 
     <a href="services/pan-card.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="icon-img" alt="PAN Card">
-      PAN Card
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="icon-img" alt="PAN Card"> PAN Card
     </a>
 
     <a href="services/aadhaar-update.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png" class="icon-img" alt="Aadhaar Update">
-      Aadhaar Update
+      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png" class="icon-img" alt="Aadhaar"> Aadhaar Update
+    </a>
+
+    <a href="services/refer.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/9131/9131471.png" class="icon-img" alt="Refer"> Refer & Earn
     </a>
 
     <a href="services/more-services.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" class="icon-img" alt="More Services">
-      More Services
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" class="icon-img" alt="More"> More Services
     </a>
-
   </div>
 
   <script>

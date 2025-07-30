@@ -1,5 +1,3 @@
-# Combine the full dashboard HTML with all service cards and embed services inline as placeholder references
-full_dashboard_html = """
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,39 +69,82 @@ full_dashboard_html = """
   <h2 style="text-align:center;">Welcome to Your Dashboard</h2>
 
   <div class="dashboard">
-"""
 
-# Add each service card into the HTML
-icons = {
-    "recharge": "3103/3103451",
-    "bill-payment": "3771/3771380",
-    "money-transfer": "3271/3271334",
-    "dth-recharge": "747/747310",
-    "aeps": "4762/4762316",
-    "credit-card": "633/633611",
-    "account-opening": "2983/2983067",
-    "balance-enquiry": "4701/4701522",
-    "mini-statement": "2803/2803677",
-    "cash-withdrawal": "9286/9286958",
-    "cash-deposit": "9286/9286910",
-    "debit-link": "6229/6229827",
-    "pan-card": "3135/3135715",
-    "aadhaar-update": "1055/1055644",
-    "more-services": "1828/1828817",
-}
-
-for name in icons:
-    label = name.replace('-', ' ').title()
-    icon_url = f"https://cdn-icons-png.flaticon.com/512/{icons[name]}.png"
-    full_dashboard_html += f'''
-    <a href="services/{name}.html" class="card">
-      <img src="{icon_url}" class="icon-img" alt="{label}">
-      {label}
+    <a href="services/recharge.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/3103/3103451.png" class="icon-img" alt="Recharge">
+      Recharge
     </a>
-    '''
 
-# Close dashboard div and add scripts
-full_dashboard_html += """
+    <a href="services/bill-payment.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/3771/3771380.png" class="icon-img" alt="Bill Payment">
+      Bill Payment
+    </a>
+
+    <a href="services/money-transfer.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/3271/3271334.png" class="icon-img" alt="Money Transfer">
+      Money Transfer
+    </a>
+
+    <a href="services/dth-recharge.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" class="icon-img" alt="DTH Recharge">
+      DTH Recharge
+    </a>
+
+    <a href="services/aeps.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/4762/4762316.png" class="icon-img" alt="AEPS">
+      AEPS
+    </a>
+
+    <a href="services/credit-card.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" class="icon-img" alt="Credit Card">
+      Credit Card
+    </a>
+
+    <a href="services/account-opening.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2983/2983067.png" class="icon-img" alt="Account Opening">
+      Account Opening
+    </a>
+
+    <a href="services/balance-enquiry.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/4701/4701522.png" class="icon-img" alt="Balance Enquiry">
+      Balance Enquiry
+    </a>
+
+    <a href="services/mini-statement.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2803/2803677.png" class="icon-img" alt="Mini Statement">
+      Mini Statement
+    </a>
+
+    <a href="services/cash-withdrawal.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/9286/9286958.png" class="icon-img" alt="Cash Withdrawal">
+      Cash Withdrawal
+    </a>
+
+    <a href="services/cash-deposit.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/9286/9286910.png" class="icon-img" alt="Cash Deposit">
+      Cash Deposit
+    </a>
+
+    <a href="services/debit-link.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/6229/6229827.png" class="icon-img" alt="Debit Link">
+      Debit Link
+    </a>
+
+    <a href="services/pan-card.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="icon-img" alt="PAN Card">
+      PAN Card
+    </a>
+
+    <a href="services/aadhaar-update.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png" class="icon-img" alt="Aadhaar Update">
+      Aadhaar Update
+    </a>
+
+    <a href="services/more-services.html" class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" class="icon-img" alt="More Services">
+      More Services
+    </a>
+
   </div>
 
   <script>
@@ -131,12 +172,6 @@ full_dashboard_html += """
       });
     }
   </script>
+
 </body>
 </html>
-"""
-
-# Save the final dashboard.html
-dashboard_combined_path = Path("/mnt/data/final-dashboard.html")
-dashboard_combined_path.write_text(full_dashboard_html, encoding="utf-8")
-
-dashboard_combined_path

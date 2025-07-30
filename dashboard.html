@@ -1,159 +1,173 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - MLM</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Dashboard - My Network</title>
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
       margin: 0;
       padding: 0;
-      background-color: #f4f6f9;
     }
-    .top-bar {
-      background-color: #fff;
+    header {
+      background: #003366;
+      color: white;
       padding: 10px 20px;
-      text-align: right;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logout-btn {
+      background: red;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
     }
     .dashboard {
-      max-width: 1100px;
-      margin: 40px auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 20px;
-      padding: 0 20px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
     }
     .card {
       background: white;
       padding: 15px;
-      border-radius: 12px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: 0.2s;
       text-decoration: none;
-      color: #222;
-      transition: transform 0.2s;
+      color: black;
     }
     .card:hover {
-      transform: scale(1.05);
-      background-color: #f0f8ff;
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .icon-img {
-      width: 50px;
-      height: 50px;
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      object-fit: contain;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
+    .icon {
+      font-size: 30px;
+      color: #0033cc;
+      margin-bottom: 8px;
     }
-    .icon-img:hover {
-      filter: drop-shadow(0 0 3px red) drop-shadow(0 0 3px blue);
-      transform: scale(1.1);
-    }
-    #user-email {
-      font-size: 14px;
-      margin-right: 15px;
-      color: green;
-    }
+    .red { color: #cc0000; }
+    .blue { color: #0033cc; }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <span id="user-email"></span>
-    <button onclick="logout()">Logout</button>
-  </div>
+<header>
+  <h2>My Network Dashboard</h2>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
 
-  <h2 style="text-align:center;">Welcome to Your Dashboard</h2>
+<div class="dashboard">
+  <a class="card" href="services/mpos.html">
+    <div class="icon blue">📠</div>
+    MPOS+
+  </a>
+  <a class="card" href="services/upi-payments.html">
+    <div class="icon red">📲</div>
+    Accept UPI Payments
+  </a>
+  <a class="card" href="services/bhim.html">
+    <div class="icon blue">🔍</div>
+    BHIM Aadhaar Pay
+  </a>
+  <a class="card" href="services/upi-cash.html">
+    <div class="icon red">🏧</div>
+    UPI Cash Withdraw
+  </a>
+  <a class="card" href="services/credit-score.html">
+    <div class="icon blue">📈</div>
+    Check Credit Score
+  </a>
+  <a class="card" href="services/loan-center.html">
+    <div class="icon red">🏦</div>
+    Loan Center
+  </a>
+  <a class="card" href="services/shg-deposit.html">
+    <div class="icon blue">👥</div>
+    SHG-Bank Deposit
+  </a>
+  <a class="card" href="services/shg-withdraw.html">
+    <div class="icon red">👥</div>
+    SHG-Bank Withdraw
+  </a>
+  <a class="card" href="services/electricity.html">
+    <div class="icon blue">💡</div>
+    Electricity
+  </a>
+  <a class="card" href="services/loan-repayment.html">
+    <div class="icon red">💳</div>
+    Loan Repayment
+  </a>
+  <a class="card" href="services/fastag.html">
+    <div class="icon blue">🚗</div>
+    Fastag
+  </a>
+  <a class="card" href="services/dth.html">
+    <div class="icon red">📡</div>
+    DTH
+  </a>
+  <a class="card" href="services/gas.html">
+    <div class="icon blue">🛢️</div>
+    Gas
+  </a>
+  <a class="card" href="services/water.html">
+    <div class="icon red">🚰</div>
+    Water
+  </a>
+  <a class="card" href="services/broadband.html">
+    <div class="icon blue">📶</div>
+    Broadband
+  </a>
+  <a class="card" href="services/mobile-prepaid.html">
+    <div class="icon red">📱</div>
+    Mobile Prepaid
+  </a>
+  <a class="card" href="services/aeps-withdraw.html">
+    <div class="icon blue">🤲</div>
+    AEPS Withdraw
+  </a>
+  <a class="card" href="services/aeps-mini.html">
+    <div class="icon red">🧾</div>
+    AEPS Mini Statement
+  </a>
+  <a class="card" href="services/aeps-deposit.html">
+    <div class="icon blue">💰</div>
+    AEPS Deposit
+  </a>
+  <a class="card" href="services/balance-enquiry.html">
+    <div class="icon red">📊</div>
+    Balance Enquiry
+  </a>
+  <a class="card" href="services/spice-atm.html">
+    <div class="icon blue">🏧</div>
+    Spice ATM
+  </a>
+  <a class="card" href="services/cash-collection.html">
+    <div class="icon red">💵</div>
+    Cash Collection
+  </a>
+  <a class="card" href="services/pan-card.html">
+    <div class="icon blue">🪪</div>
+    PAN Card
+  </a>
+  <a class="card" href="services/refer.html">
+    <div class="icon red">🔗</div>
+    Refer System
+  </a>
+</div>
 
-  <div class="dashboard">
-    <!-- Service Cards -->
-    <a href="services/recharge.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3103/3103451.png" class="icon-img" alt="Recharge"> Recharge
-    </a>
-
-    <a href="services/bill-payment.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3771/3771380.png" class="icon-img" alt="Bill Payment"> Bill Payment
-    </a>
-
-    <a href="services/money-transfer.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3271/3271334.png" class="icon-img" alt="Money Transfer"> Money Transfer
-    </a>
-
-    <a href="services/dth-recharge.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" class="icon-img" alt="DTH"> DTH Recharge
-    </a>
-
-    <a href="services/aeps.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/4762/4762316.png" class="icon-img" alt="AEPS"> AEPS Withdraw
-    </a>
-
-    <a href="services/cash-deposit.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/9286/9286910.png" class="icon-img" alt="Deposit"> AEPS Deposit
-    </a>
-
-    <a href="services/mini-statement.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2803/2803677.png" class="icon-img" alt="Mini Statement"> Mini Statement
-    </a>
-
-    <a href="services/balance-enquiry.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/4701/4701522.png" class="icon-img" alt="Balance"> Balance Enquiry
-    </a>
-
-    <a href="services/credit-card.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" class="icon-img" alt="Credit Card"> Credit Card
-    </a>
-
-    <a href="services/account-opening.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2983/2983067.png" class="icon-img" alt="Account Opening"> Account Opening
-    </a>
-
-    <a href="services/pan-card.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="icon-img" alt="PAN Card"> PAN Card
-    </a>
-
-    <a href="services/aadhaar-update.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png" class="icon-img" alt="Aadhaar"> Aadhaar Update
-    </a>
-
-    <a href="services/refer.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/9131/9131471.png" class="icon-img" alt="Refer"> Refer & Earn
-    </a>
-
-    <a href="services/more-services.html" class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" class="icon-img" alt="More"> More Services
-    </a>
-  </div>
-
-  <script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
-      authDomain: "mlm-network-157e8.firebaseapp.com",
-      projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.appspot.com",
-      messagingSenderId: "433192039581",
-      appId: "1:433192039581:web:42d02b965870e4a8969074"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        document.getElementById("user-email").innerText = "👤 " + user.email;
-      } else {
-        window.location.href = "index.html";
-      }
-    });
-
-    function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = "index.html";
-      });
-    }
-  </script>
+<script>
+  function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
+  }
+</script>
 
 </body>
 </html>

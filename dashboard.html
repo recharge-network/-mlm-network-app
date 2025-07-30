@@ -1,10 +1,24 @@
-<!-- dashboard.html -->
+# Combine the full dashboard HTML with all service cards and embed services inline as placeholder references
+full_dashboard_html = """
 <!DOCTYPE html>
 <html>
 <head>
   <title>Dashboard - MLM</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f2f5;
+    }
+    .top-bar {
+      text-align: right;
+      padding: 10px 20px;
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
     .dashboard {
       max-width: 900px;
       margin: 40px auto;
@@ -26,78 +40,103 @@
       transform: scale(1.05);
       background: #f0f8ff;
     }
-    .icon {
-      font-size: 30px;
-      margin-bottom: 10px;
+    .icon-img {
+      width: 50px;
+      height: 50px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+    .icon-img:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 4px #007BFF) drop-shadow(0 0 4px #dc3545);
+    }
+    #user-email {
+      font-size: 14px;
+      margin-right: 10px;
+      color: green;
     }
   </style>
 </head>
 <body>
 
+  <div class="top-bar">
+    <span id="user-email"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+
   <h2 style="text-align:center;">Welcome to Your Dashboard</h2>
 
   <div class="dashboard">
-    <a href="services/recharge.html" class="card">
-      <div class="icon">🔌</div>
-      Recharge
+"""
+
+# Add each service card into the HTML
+icons = {
+    "recharge": "3103/3103451",
+    "bill-payment": "3771/3771380",
+    "money-transfer": "3271/3271334",
+    "dth-recharge": "747/747310",
+    "aeps": "4762/4762316",
+    "credit-card": "633/633611",
+    "account-opening": "2983/2983067",
+    "balance-enquiry": "4701/4701522",
+    "mini-statement": "2803/2803677",
+    "cash-withdrawal": "9286/9286958",
+    "cash-deposit": "9286/9286910",
+    "debit-link": "6229/6229827",
+    "pan-card": "3135/3135715",
+    "aadhaar-update": "1055/1055644",
+    "more-services": "1828/1828817",
+}
+
+for name in icons:
+    label = name.replace('-', ' ').title()
+    icon_url = f"https://cdn-icons-png.flaticon.com/512/{icons[name]}.png"
+    full_dashboard_html += f'''
+    <a href="services/{name}.html" class="card">
+      <img src="{icon_url}" class="icon-img" alt="{label}">
+      {label}
     </a>
-    <a href="services/bill-payment.html" class="card">
-      <div class="icon">💡</div>
-      Bill Payment
-    </a>
-    <a href="services/money-transfer.html" class="card">
-      <div class="icon">💸</div>
-      Money Transfer
-    </a>
-    <a href="services/dth-recharge.html" class="card">
-      <div class="icon">📺</div>
-      DTH Recharge
-    </a>
-    <a href="services/aeps.html" class="card">
-      <div class="icon">🆔</div>
-      AEPS
-    </a>
-    <a href="services/credit-card.html" class="card">
-      <div class="icon">💳</div>
-      Credit Card
-    </a>
-    <a href="services/account-opening.html" class="card">
-      <div class="icon">🏦</div>
-      Account Opening
-    </a>
-    <a href="services/balance-enquiry.html" class="card">
-      <div class="icon">📊</div>
-      Balance Enquiry
-    </a>
-    <a href="services/mini-statement.html" class="card">
-      <div class="icon">📄</div>
-      Mini Statement
-    </a>
-    <a href="services/cash-withdrawal.html" class="card">
-      <div class="icon">🏧</div>
-      Cash Withdrawal
-    </a>
-    <a href="services/cash-deposit.html" class="card">
-      <div class="icon">💰</div>
-      Cash Deposit
-    </a>
-    <a href="services/debit-link.html" class="card">
-      <div class="icon">🔗</div>
-      Debit Link
-    </a>
-    <a href="services/pan-card.html" class="card">
-      <div class="icon">🪪</div>
-      PAN Card
-    </a>
-    <a href="services/aadhaar-update.html" class="card">
-      <div class="icon">🧾</div>
-      Aadhaar Update
-    </a>
-    <a href="services/more-services.html" class="card">
-      <div class="icon">➕</div>
-      More Services
-    </a>
+    '''
+
+# Close dashboard div and add scripts
+full_dashboard_html += """
   </div>
 
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.appspot.com",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById("user-email").innerText = "👤 " + user.email;
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "index.html";
+      });
+    }
+  </script>
 </body>
 </html>
+"""
+
+# Save the final dashboard.html
+dashboard_combined_path = Path("/mnt/data/final-dashboard.html")
+dashboard_combined_path.write_text(full_dashboard_html, encoding="utf-8")
+
+dashboard_combined_path

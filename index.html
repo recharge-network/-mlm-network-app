@@ -2,55 +2,10 @@
 <html>
 <head>
   <title>Login - MLM</title>
-  <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase CDN (v9 modular style) -->
-  <script type="module">
-    // Import modules directly (modular syntax)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl",
-      authDomain: "mlm-network-157e8.firebaseapp.com",
-      projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.appspot.com",
-      messagingSenderId: "433192039581",
-      appId: "1:433192039581:web:42d02b965870"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Attach functions globally
-    window.login = function () {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          document.getElementById("message").innerText = "✅ Login successful!";
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
-    };
-
-    window.signup = function () {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          document.getElementById("message").innerText = "✅ Signup successful!";
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
-    };
-  </script>
+  <!-- Firebase v8 CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <style>
     body {
@@ -105,13 +60,53 @@
 <body>
   <div class="login-box">
     <h2>Login / Signup</h2>
-    <input type="text" placeholder="Enter email" id="email">
-    <input type="password" placeholder="Enter password" id="password">
+    <input type="email" id="email" placeholder="Enter email">
+    <input type="password" id="password" placeholder="Enter password">
 
     <button onclick="login()">Login</button>
     <button onclick="signup()">Signup</button>
 
     <p id="message"></p>
   </div>
+
+  <script>
+    // ✅ Corrected Firebase Config
+    var firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.appspot.com",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function(user) {
+          document.getElementById("message").innerText = "✅ Login successful!";
+        })
+        .catch(function(error) {
+          document.getElementById("message").innerText = "❌ " + error.message;
+        });
+    }
+
+    function signup() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(user) {
+          document.getElementById("message").innerText = "✅ Signup successful!";
+        })
+        .catch(function(error) {
+          document.getElementById("message").innerText = "❌ " + error.message;
+        });
+    }
+  </script>
 </body>
 </html>

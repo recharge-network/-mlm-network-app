@@ -1,0 +1,52 @@
+<!-- bill.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bill Payment</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100">
+
+  <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-center text-blue-700">Bill Payment</h2>
+
+    <form id="billForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Bill Type</label>
+        <select name="bill_type" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          <option value="">Select Bill Type</option>
+          <option value="electricity">Electricity</option>
+          <option value="water">Water</option>
+          <option value="gas">Gas</option>
+          <option value="landline">Landline</option>
+          <option value="broadband">Broadband</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Consumer Number</label>
+        <input type="text" name="consumer" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter consumer number" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
+        <input type="number" name="amount" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter amount" required />
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Pay Bill</button>
+    </form>
+
+    <p id="message" class="text-center text-green-600 mt-4 hidden">Bill payment request submitted!</p>
+  </div>
+
+  <script>
+    document.getElementById('billForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Normally API call here
+      document.getElementById('message').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>

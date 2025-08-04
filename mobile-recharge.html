@@ -1,70 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mobile Recharge</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f8f8f8;
-      padding: 20px;
-    }
-    .container {
-      max-width: 400px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, select, button {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 </head>
-<body>
+<body class="bg-gray-100">
 
-  <div class="container">
-    <h2>Mobile Recharge</h2>
-    <form onsubmit="handleRecharge(event)">
-      <label>Mobile Number</label>
-      <input type="tel" required placeholder="Enter Mobile Number">
+  <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-center text-blue-700">Mobile Recharge</h2>
 
-      <label>Operator</label>
-      <select required>
-        <option value="">-- Select Operator --</option>
-        <option>Jio</option>
-        <option>Airtel</option>
-        <option>Vi</option>
-        <option>BSNL</option>
-      </select>
+    <form id="rechargeForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Mobile Number</label>
+        <input type="text" maxlength="10" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter 10 digit number" required />
+      </div>
 
-      <label>Amount</label>
-      <input type="number" required placeholder="Enter Amount">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Operator</label>
+        <select class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          <option value="">-- Select Operator --</option>
+          <option>Jio</option>
+          <option>Airtel</option>
+          <option>Vi</option>
+          <option>BSNL</option>
+        </select>
+      </div>
 
-      <button type="submit">Recharge Now</button>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
+        <input type="number" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter Amount" required />
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Recharge Now</button>
     </form>
+
+    <p id="message" class="text-center text-green-600 mt-4 hidden">✅ Recharge request submitted!</p>
   </div>
 
   <script>
-    function handleRecharge(event) {
-      event.preventDefault();
-      alert(\"✅ Recharge request submitted! (Backend API connect karna baaki hai)\");
-    }
+    document.getElementById('rechargeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('message').classList.remove('hidden');
+    });
   </script>
-
 </body>
 </html>

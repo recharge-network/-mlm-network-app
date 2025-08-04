@@ -1,95 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login - MLM</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 300px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    #message {
-      margin-top: 10px;
-      color: green;
-      text-align: center;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - All Services</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-6xl mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-6 text-center text-blue-800">All Services</h1>
+    <div class="flex flex-wrap -mx-2 justify-center">
 
-  <div class="container">
-    <h2>Login / Signup</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Signup</button>
-    <div id="message"></div>
+      <!-- Each service -->
+      <!-- Replace/add more icons/files as needed -->
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2">
+        <a href="recharge.html">
+          <div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100">
+            <img src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png" class="w-16 h-16 mb-2" />
+            <p class="text-center text-sm font-semibold text-blue-600">Mobile Recharge</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2">
+        <a href="dth.html">
+          <div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100">
+            <img src="https://cdn-icons-png.flaticon.com/512/1682/1682130.png" class="w-16 h-16 mb-2" />
+            <p class="text-center text-sm font-semibold text-blue-600">DTH Recharge</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Repeat this block for all services -->
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="bill.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/2920/2920290.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Bill Payment</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="money.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/3183/3183273.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Money Transfer</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="aeps.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">AEPS</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="balance.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/3500/3500833.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Balance Enquiry</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="statement.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/3500/3500883.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Mini Statement</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="withdraw.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Cash Withdrawal</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="pan.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/684/684262.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">PAN Card</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="aadhaar.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/3601/3601389.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Aadhaar Update</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="account.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/4139/4139981.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Account Opening</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="credit.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Credit Card</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="deditlink.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/633/633606.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Debit Link</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="cashdeposit.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/1785/1785273.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Cash Deposit</p></div></a></div>
+
+      <div class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2"><a href="more.html"><div class="bg-white rounded-xl shadow-md flex flex-col items-center p-4 hover:bg-blue-100"><img src="https://cdn-icons-png.flaticon.com/512/2306/2306124.png" class="w-16 h-16 mb-2" /><p class="text-center text-sm font-semibold text-blue-600">Network Marketing</p></div></a></div>
+
+    </div>
   </div>
-
-  <script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
-      authDomain: "mlm-network-157e8.firebaseapp.com",
-      projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.appspot.com",
-      messagingSenderId: "433192039581",
-      appId: "1:433192039581:web:42d02b965870e4a8969074"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          document.getElementById("message").innerText = "✅ Login successful! Redirecting...";
-          setTimeout(() => {
-            window.location.href = "dashboard.html";
-          }, 1000);
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
-    }
-
-    function signup() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          document.getElementById("message").innerText = "✅ Signup successful! Please login.";
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
-    }
-  </script>
-
 </body>
 </html>

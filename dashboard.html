@@ -30,17 +30,17 @@
       cursor: pointer;
     }
     .dashboard {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 40px auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 20px;
     }
     .card {
       background: white;
-      padding: 20px;
+      padding: 15px;
       text-align: center;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 0 10px #ccc;
       text-decoration: none;
       color: black;
@@ -48,10 +48,10 @@
     }
     .card:hover {
       transform: scale(1.05);
-      background: #f0f8ff;
+      background: #e6f2ff;
     }
     .icon {
-      font-size: 30px;
+      font-size: 40px;
       margin-bottom: 10px;
     }
   </style>
@@ -64,44 +64,24 @@
   </header>
 
   <div class="dashboard">
-    <a href="services/mobile-recharge.html" class="card">
-      <div class="icon">📱</div>
-      Mobile Recharge
-    </a>
-    <a href="services/dth-recharge.html" class="card">
-      <div class="icon">📺</div>
-      DTH Recharge
-    </a>
-    <a href="services/money-transfer.html" class="card">
-      <div class="icon">💸</div>
-      Money Transfer
-    </a>
-    <a href="services/electricity-bill.html" class="card">
-      <div class="icon">💡</div>
-      Electric Bill Payment
-    </a>
-    <a href="services/lpg-booking.html" class="card">
-      <div class="icon">🛢</div>
-      LPG Booking
-    </a>
-    <a href="services/network-refer.html" class="card">
-      <div class="icon">🔗</div>
-      Network Marketing Refer
+    <a href="services/mobile-recharge.html" class="card"><div class="icon">📱</div>Mobile Recharge</a>
+    <a href="services/dth-recharge.html" class="card"><div class="icon">📺</div>DTH Recharge</a>
+    <a href="services/money-transfer.html" class="card"><div class="icon">💸</div>Money Transfer</a>
+    <a href="services/electricity-bill.html" class="card"><div class="icon">💡</div>Electricity Bill</a>
+    <a href="services/lpg-booking.html" class="card"><div class="icon">🛢️</div>LPG Booking</a>
+    <a href="services/network-refer.html" class="card"><div class="icon">🔗</div>Network Refer</a>
+    <a href="services/pan-card.html" class="card"><div class="icon">🧾</div>PAN Card</a>
+    <a href="services/aeps.html" class="card"><div class="icon">🧍</div>AEPS</a>
+    <a href="services/credit-card.html" class="card"><div class="icon">💳</div>Credit Card Bill</a>
+    <a href="services/account-opening.html" class="card"><div class="icon">🧑‍💼</div>Account Opening</a>
+    <a href="services/mini-statement.html" class="card"><div class="icon">🧾</div>Mini Statement</a>
+    <a href="services/balance-enquiry.html" class="card"><div class="icon">💰</div>Balance Enquiry</a>
+    <a href="services/network-business.html" class="card">
+      <img src="assets/images/network-marketing.png" alt="Network Marketing" style="height: 60px; margin-bottom: 10px;">
+      <div>Network Marketing Business</div>
     </a>
   </div>
 
-  <script>
-    // Firebase logout logic
-    document.getElementById("logout").addEventListener("click", function() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = "index.html";
-      }).catch((error) => {
-        alert("Logout failed: " + error.message);
-      });
-    });
-  </script>
-
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script>
@@ -119,6 +99,14 @@
       if (!user) {
         window.location.href = "index.html";
       }
+    });
+
+    document.getElementById("logout").addEventListener("click", function() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "index.html";
+      }).catch((error) => {
+        alert("Logout failed: " + error.message);
+      });
     });
   </script>
 

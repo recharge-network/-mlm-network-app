@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Dashboard - MLM</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -33,7 +32,7 @@
       max-width: 1100px;
       margin: 40px auto;
       display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 👈 4 columns fixed */
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
     }
     .card {
@@ -64,22 +63,8 @@
   </header>
 
   <div class="dashboard">
-    <a href="services/mobile-recharge.html" class="card"><div class="icon">📱</div>Mobile Recharge</a>
-    <a href="services/dth-recharge.html" class="card"><div class="icon">📺</div>DTH Recharge</a>
-    <a href="services/money-transfer.html" class="card"><div class="icon">💸</div>Money Transfer</a>
-    <a href="services/electricity-bill.html" class="card"><div class="icon">💡</div>Electricity Bill</a>
-    <a href="services/lpg-booking.html" class="card"><div class="icon">🛢️</div>LPG Booking</a>
-    <a href="services/network-refer.html" class="card"><div class="icon">🔗</div>Network Refer</a>
-    <a href="services/pan-card.html" class="card"><div class="icon">🧾</div>PAN Card</a>
-    <a href="services/aeps.html" class="card"><div class="icon">🧍</div>AEPS</a>
-    <a href="services/credit-card.html" class="card"><div class="icon">💳</div>Credit Card Bill</a>
-    <a href="services/account-opening.html" class="card"><div class="icon">🧑‍💼</div>Account Opening</a>
-    <a href="services/mini-statement.html" class="card"><div class="icon">🧾</div>Mini Statement</a>
-    <a href="services/balance-enquiry.html" class="card"><div class="icon">💰</div>Balance Enquiry</a>
-    <a href="services/network-business.html" class="card">
-      <img src="assets/images/network-marketing.png" alt="Network Marketing" style="height: 60px; margin-bottom: 10px;">
-      <div>Network Marketing Business</div>
-    </a>
+    <a href="mobile-recharge.html" class="card"><div class="icon">📱</div>Mobile Recharge</a>
+    <!-- Baaki icons future me yahaan add honge -->
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>

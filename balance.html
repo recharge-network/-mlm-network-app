@@ -1,0 +1,26 @@
+<!-- balance.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balance Enquiry</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100">
+
+  <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-center text-blue-700">Balance Enquiry</h2>
+
+    <form id="balanceForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Aadhaar Number</label>
+        <input type="text" name="aadhaar" maxlength="12" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter Aadhaar number" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Bank Name</label>
+        <input type="text" name="bank" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter bank name" required />
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-70

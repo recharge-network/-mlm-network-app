@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Referral</title>
+  <title>Referral & Team</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     // 🔹 Firebase Config
     const firebaseConfig = {
@@ -24,47 +24,82 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    let currentUser;
+
     // 🔹 Auth Guard
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
       } else {
-        document.getElementById("refLink").textContent = `${window.location.origin}/signup.html?ref=${user.uid}`;
-        loadDownline(user.uid);
+        currentUser = user;
+        showReferralLink();
+        loadTeam();
       }
     });
 
-    // 🔹 Load Downline Users
-    async function loadDownline(uid) {
-      const list = document.getElementById("downlineList");
-      list.innerHTML = "<li class='text-gray-500'>Loading...</li>";
-      const q = query(collection(db, "users"), where("referrer", "==", uid));
+    // 🔹 Show Referral Link
+    function showReferralLink() {
+      const link = `${window.location.origin}/signup.html?ref=${currentUser.uid}`;
+      document.getElementById("refLink").value = link;
+    }
+
+    // 🔹 Copy Link
+    window.copyLink = () => {
+      const input = document.getElementById("refLink");
+      input.select();
+      document.execCommand("copy");
+      document.getElementById("msg").textContent = "✅ Referral link copied!";
+    }
+
+    // 🔹 Load Team Members
+    async function loadTeam() {
+      const tbody = document.getElementById("teamTable");
+      tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center">Loading...</td></tr>`;
+      const q = query(collection(db, "users"), where("referrer", "==", currentUser.uid));
       const snaps = await getDocs(q);
-      list.innerHTML = "";
-      if (snaps.empty) {
-        list.innerHTML = "<li class='text-gray-500'>No referrals yet</li>";
-        return;
-      }
-      snaps.forEach(doc => {
-        const u = doc.data();
-        const li = `<li class="border-b p-2">${u.name || u.email} <span class="text-xs text-gray-500">(uid: ${u.uid})</span></li>`;
-        list.insertAdjacentHTML("beforeend", li);
+      tbody.innerHTML = "";
+      let i = 1;
+      snaps.forEach(docSnap => {
+        const data = docSnap.data();
+        const row = `
+          <tr class="border-b">
+            <td class="p-2">${i++}</td>
+            <td class="p-2">${data.name || "N/A"}</td>
+            <td class="p-2">${data.email || ""}</td>
+          </tr>`;
+        tbody.insertAdjacentHTML("beforeend", row);
       });
+      if (tbody.innerHTML === "") {
+        tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center">No referrals yet.</td></tr>`;
+      }
     }
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <div class="max-w-3xl mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-800 mb-4">Referral System</h1>
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">Referral & Team</h1>
 
-    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
-      <h2 class="text-lg font-semibold mb-2">Your Referral Link</h2>
-      <p class="p-2 bg-gray-100 rounded break-all text-sm" id="refLink"></p>
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+      <label class="block mb-2">Your Referral Link</label>
+      <div class="flex">
+        <input id="refLink" type="text" readonly class="flex-grow border p-2 rounded-l"/>
+        <button onclick="copyLink()" class="bg-blue-600 text-white px-4 rounded-r">Copy</button>
+      </div>
+      <p id="msg" class="text-sm mt-2"></p>
     </div>
 
     <div class="bg-white shadow-md rounded-lg p-4">
-      <h2 class="text-lg font-semibold mb-2">Your Downline</h2>
-      <ul id="downlineList" class="text-sm"></ul>
+      <h2 class="text-lg font-semibold mb-2">My Team</h2>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2">#</th>
+            <th class="p-2 text-left">Name</th>
+            <th class="p-2 text-left">Email</th>
+          </tr>
+        </thead>
+        <tbody id="teamTable"></tbody>
+      </table>
     </div>
 
     <p class="mt-4 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>

@@ -1,89 +1,108 @@
+<!-- login.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login - MLM</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 300px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    #message {
-      margin-top: 10px;
-      color: green;
-      text-align: center;
-    }
-    a {
-      display: block;
-      text-align: center;
-      margin-top: 10px;
-      color: #007BFF;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  <div class="container">
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <a href="signup.html">Create Account</a>
-    <div id="message"></div>
-  </div>
-
-  <script>
-    var firebaseConfig = {
+    const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
       projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.appspot.com",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
       messagingSenderId: "433192039581",
       appId: "1:433192039581:web:42d02b965870e4a8969074"
     };
-    firebase.initializeApp(firebaseConfig);
 
-    function login() {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.doLogin = async () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          document.getElementById("message").innerText = "✅ Login successful! Redirecting...";
-          setTimeout(() => {
-            window.location.href = "index.html"; // redirect to dashboard
-          }, 1000);
-        })
-        .catch((error) => {
-          document.getElementById("message").innerText = "❌ " + error.message;
-        });
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "index.html";
+      } catch (err) {
+        document.getElementById("msg").textContent = err.message;
+      }
     }
   </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-sm">
+    <h2 class="text-xl font-bold text-center mb-4">Login</h2>
+    <input id="email" type="email" placeholder="Email" class="w-full border p-2 rounded mb-2" />
+    <input id="password" type="password" placeholder="Password" class="w-full border p-2 rounded mb-2" />
+    <button onclick="doLogin()" class="w-full bg-blue-600 text-white p-2 rounded">Login</button>
+    <p id="msg" class="text-red-500 text-sm mt-2"></p>
+    <p class="mt-4 text-sm text-center">New user? <a href="signup.html" class="text-blue-600">Sign up</a></p>
+  </div>
+</body>
+</html>
 
+
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.doSignup = async () => {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: name });
+        await setDoc(doc(db, "users", cred.user.uid), {
+          uid: cred.user.uid,
+          name,
+          email,
+          balance: 0,
+          createdAt: serverTimestamp()
+        });
+        window.location.href = "index.html";
+      } catch (err) {
+        document.getElementById("msg").textContent = err.message;
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-sm">
+    <h2 class="text-xl font-bold text-center mb-4">Sign Up</h2>
+    <input id="name" type="text" placeholder="Full Name" class="w-full border p-2 rounded mb-2" />
+    <input id="email" type="email" placeholder="Email" class="w-full border p-2 rounded mb-2" />
+    <input id="password" type="password" placeholder="Password" class="w-full border p-2 rounded mb-2" />
+    <button onclick="doSignup()" class="w-full bg-blue-600 text-white p-2 rounded">Sign Up</button>
+    <p id="msg" class="text-red-500 text-sm mt-2"></p>
+    <p class="mt-4 text-sm text-center">Already have an account? <a href="login.html" class="text-blue-600">Login</a></p>
+  </div>
 </body>
 </html>

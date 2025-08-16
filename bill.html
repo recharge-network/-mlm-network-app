@@ -1,52 +1,97 @@
-<!-- bill.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bill Payment</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-</head>
-<body class="bg-gray-100">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-bold mb-4 text-center text-blue-700">Bill Payment</h2>
+    // 🔹 Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
 
-    <form id="billForm" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Bill Type</label>
-        <select name="bill_type" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
-          <option value="">Select Bill Type</option>
-          <option value="electricity">Electricity</option>
-          <option value="water">Water</option>
-          <option value="gas">Gas</option>
-          <option value="landline">Landline</option>
-          <option value="broadband">Broadband</option>
-        </select>
-      </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Consumer Number</label>
-        <input type="text" name="consumer" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter consumer number" required />
-      </div>
+    let currentUser;
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
-        <input type="number" name="amount" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Enter amount" required />
-      </div>
-
-      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Pay Bill</button>
-    </form>
-
-    <p id="message" class="text-center text-green-600 mt-4 hidden">Bill payment request submitted!</p>
-  </div>
-
-  <script>
-    document.getElementById('billForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Normally API call here
-      document.getElementById('message').classList.remove('hidden');
+    // 🔹 Auth Guard
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+      }
     });
+
+    // 🔹 Pay Bill Function
+    window.doBillPay = async () => {
+      const consumer = document.getElementById("consumer").value.trim();
+      const billType = document.getElementById("billType").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (!consumer || !billType || isNaN(amount) || amount <= 0) {
+        document.getElementById("msg").textContent = "⚠️ Please fill all fields correctly.";
+        return;
+      }
+
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(userRef);
+
+        if (!snap.exists() || snap.data().balance < amount) {
+          document.getElementById("msg").textContent = "❌ Insufficient balance.";
+          return;
+        }
+
+        // Deduct balance
+        await updateDoc(userRef, { balance: increment(-amount) });
+
+        // Save ledger entry
+        await addDoc(collection(db, "users", currentUser.uid, "ledger"), {
+          type: "debit",
+          amount,
+          note: `Bill Payment: ${billType} (Consumer ID: ${consumer})`,
+          ts: serverTimestamp()
+        });
+
+        // ✅ Future me yahan API call connect karna
+        document.getElementById("msg").textContent = `✅ Bill payment request submitted for ${billType}`;
+      } catch (err) {
+        document.getElementById("msg").textContent = "❌ " + err.message;
+      }
+    }
   </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-md mx-auto p-4">
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">Bill Payment</h1>
+    <div class="bg-white shadow-md rounded-lg p-4">
+      <input id="consumer" type="text" placeholder="Consumer / Account ID" class="w-full border p-2 rounded mb-2"/>
+      <select id="billType" class="w-full border p-2 rounded mb-2">
+        <option value="">Select Bill Type</option>
+        <option value="Electricity">Electricity</option>
+        <option value="Gas">Gas</option>
+        <option value="Water">Water</option>
+        <option value="Broadband">Broadband</option>
+        <option value="Landline">Landline</option>
+      </select>
+      <input id="amount" type="number" placeholder="Amount" class="w-full border p-2 rounded mb-2"/>
+      <button onclick="doBillPay()" class="w-full bg-blue-600 text-white p-2 rounded">Pay Bill</button>
+      <p id="msg" class="text-sm mt-2"></p>
+    </div>
+    <p class="mt-4 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>
+  </div>
 </body>
 </html>

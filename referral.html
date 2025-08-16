@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Referral</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // 🔹 Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // 🔹 Auth Guard
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("refLink").textContent = `${window.location.origin}/signup.html?ref=${user.uid}`;
+        loadDownline(user.uid);
+      }
+    });
+
+    // 🔹 Load Downline Users
+    async function loadDownline(uid) {
+      const list = document.getElementById("downlineList");
+      list.innerHTML = "<li class='text-gray-500'>Loading...</li>";
+      const q = query(collection(db, "users"), where("referrer", "==", uid));
+      const snaps = await getDocs(q);
+      list.innerHTML = "";
+      if (snaps.empty) {
+        list.innerHTML = "<li class='text-gray-500'>No referrals yet</li>";
+        return;
+      }
+      snaps.forEach(doc => {
+        const u = doc.data();
+        const li = `<li class="border-b p-2">${u.name || u.email} <span class="text-xs text-gray-500">(uid: ${u.uid})</span></li>`;
+        list.insertAdjacentHTML("beforeend", li);
+      });
+    }
+  </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-3xl mx-auto p-4">
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">Referral System</h1>
+
+    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-semibold mb-2">Your Referral Link</h2>
+      <p class="p-2 bg-gray-100 rounded break-all text-sm" id="refLink"></p>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-2">Your Downline</h2>
+      <ul id="downlineList" class="text-sm"></ul>
+    </div>
+
+    <p class="mt-4 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>
+  </div>
+</body>
+</html>

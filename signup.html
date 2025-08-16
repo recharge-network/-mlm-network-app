@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up</title>
+  <title>Forgot Password</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
     // 🔹 Aapka Firebase config
     const firebaseConfig = {
@@ -22,44 +21,32 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
-    // 🔹 Signup Function
-    window.doSignup = async () => {
-      const name = document.getElementById("name").value;
+    // 🔹 Reset Password Function
+    window.doReset = async () => {
       const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      if (!email) {
+        document.getElementById("msg").textContent = "⚠️ Please enter your email.";
+        return;
+      }
       try {
-        // user create
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-
-        // Firestore me user data save
-        await setDoc(doc(db, "users", cred.user.uid), {
-          uid: cred.user.uid,
-          name,
-          email,
-          balance: 0,
-          createdAt: serverTimestamp()
-        });
-
-        // dashboard par redirect
-        window.location.href = "index.html";
+        await sendPasswordResetEmail(auth, email);
+        document.getElementById("msg").textContent = "✅ Reset link sent to " + email;
+        document.getElementById("msg").className = "text-green-600 text-sm mt-2";
       } catch (err) {
         document.getElementById("msg").textContent = err.message;
+        document.getElementById("msg").className = "text-red-500 text-sm mt-2";
       }
     }
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
   <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-sm">
-    <h2 class="text-xl font-bold text-center mb-4">Sign Up</h2>
-    <input id="name" type="text" placeholder="Full Name" class="w-full border p-2 rounded mb-2" />
-    <input id="email" type="email" placeholder="Email" class="w-full border p-2 rounded mb-2" />
-    <input id="password" type="password" placeholder="Password" class="w-full border p-2 rounded mb-2" />
-    <button onclick="doSignup()" class="w-full bg-blue-600 text-white p-2 rounded">Sign Up</button>
-    <p id="msg" class="text-red-500 text-sm mt-2"></p>
-    <p class="mt-4 text-sm text-center">Already have an account? <a href="login.html" class="text-blue-600">Login</a></p>
+    <h2 class="text-xl font-bold text-center mb-4">Forgot Password</h2>
+    <input id="email" type="email" placeholder="Enter your Email" class="w-full border p-2 rounded mb-2" />
+    <button onclick="doReset()" class="w-full bg-blue-600 text-white p-2 rounded">Send Reset Link</button>
+    <p id="msg" class="text-sm mt-2"></p>
+    <p class="mt-4 text-sm text-center">Back to <a href="login.html" class="text-blue-600">Login</a></p>
   </div>
 </body>
 </html>

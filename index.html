@@ -9,10 +9,12 @@
     /* Money rain effect */
     .money {
       position: fixed;
-      top: -50px;
-      font-size: 2rem;
-      opacity: 0.8;
+      top: -80px;
+      width: 80px;
+      height: auto;
+      opacity: 0.9;
       animation: fall linear forwards;
+      pointer-events: none;
     }
 
     @keyframes fall {
@@ -133,12 +135,17 @@
     });
 
     // Money Rain Animation
+    const notes = [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/India_new_100_INR%2C_MG_series%2C_2018%2C_obverse.jpg/320px-India_new_100_INR%2C_MG_series%2C_2018%2C_obverse.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg/320px-India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg"
+    ];
+
     function createMoney() {
-      const money = document.createElement("div");
+      const money = document.createElement("img");
+      money.src = notes[Math.floor(Math.random() * notes.length)];
       money.classList.add("money");
       money.style.left = Math.random() * window.innerWidth + "px";
       money.style.animationDuration = (3 + Math.random() * 3) + "s";
-      money.innerText = "💵"; // yaha note emoji use hua hai (chaho to image bhi daal sakte ho)
       document.getElementById("rain").appendChild(money);
 
       setTimeout(() => {
@@ -146,7 +153,7 @@
       }, 6000);
     }
 
-    setInterval(createMoney, 500); // har 0.5 sec me ek note girta rahega
+    setInterval(createMoney, 400); // har 0.4 sec me ek note girta rahega
   </script>
 </body>
 </html>

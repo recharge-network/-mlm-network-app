@@ -1,112 +1,152 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Money rain effect */
+    .money {
+      position: fixed;
+      top: -50px;
+      font-size: 2rem;
+      opacity: 0.8;
+      animation: fall linear forwards;
+    }
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
-    authDomain: "mlm-network-157e8.firebaseapp.com",
-    projectId: "mlm-network-157e8",
-    storageBucket: "mlm-network-157e8.firebasestorage.app",
-    messagingSenderId: "433192039581",
-    appId: "1:433192039581:web:42d02b965870e4a8969074"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // ✅ आपका Admin UID
-  let adminUID = "0WU4cP36N1Zw9lLiT6igc2jwY523";
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-    } else {
-      document.getElementById("welcomeUser").textContent = "👋 Welcome, " + (user.email || "User");
-
-      // अगर Admin है तो Admin Panel दिखाओ
-      if (user.uid === adminUID) {
-        document.getElementById("adminBtn").classList.remove("hidden");
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 1;
       }
     }
-  });
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center overflow-hidden">
 
-  // Logout
-  document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "login.html";
-  });
-</script>
+  <!-- Rain Container -->
+  <div id="rain"></div>
 
-<body class="bg-gray-100 min-h-screen">
-  <div class="max-w-6xl mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-700 mb-4">📱 Dashboard</h1>
-    <p id="welcomeUser" class="mb-4 text-gray-600"></p>
-
-    <!-- Services Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-
-      <!-- Wallet -->
-      <a href="wallet.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">💰</span>
-        <p class="mt-2">Wallet</p>
-      </a>
-
-      <!-- Ledger -->
-      <a href="ledger.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">📒</span>
-        <p class="mt-2">Ledger</p>
-      </a>
-
-      <!-- Profile -->
-      <a href="profile.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">👤</span>
-        <p class="mt-2">Profile</p>
-      </a>
-
-      <!-- PAN Card -->
-      <a href="pan.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">🪪</span>
-        <p class="mt-2">PAN Card</p>
-      </a>
-
-      <!-- Recharge -->
-      <a href="recharge.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">📱</span>
-        <p class="mt-2">Recharge</p>
-      </a>
-
-      <!-- Bill Payment -->
-      <a href="bill.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">🧾</span>
-        <p class="mt-2">Bill Payment</p>
-      </a>
-
-      <!-- DTH -->
-      <a href="dth.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">📺</span>
-        <p class="mt-2">DTH</p>
-      </a>
-
-      <!-- AEPS -->
-      <a href="aeps.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">🆔</span>
-        <p class="mt-2">AEPS</p>
-      </a>
-
-      <!-- Money Transfer -->
-      <a href="money.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">🏦</span>
-        <p class="mt-2">Money Transfer</p>
-      </a>
-
-      <!-- Admin Panel (only visible to admin) -->
-      <a id="adminBtn" href="admin.html" class="hidden bg-red-600 text-white shadow rounded-lg p-4 flex flex-col items-center">
-        <span class="text-3xl">👑</span>
-        <p class="mt-2 font-bold">Admin Panel</p>
-      </a>
-
+  <div class="relative z-10 max-w-6xl w-full p-6">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold text-white drop-shadow-lg">📱 Smart Network Dashboard</h1>
+      <p id="welcomeUser" class="mt-2 text-lg text-gray-200"></p>
     </div>
 
-    <button id="logoutBtn" class="mt-6 bg-gray-700 text-white px-4 py-2 rounded">Logout</button>
+    <!-- Services Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+      
+      <!-- Service Card -->
+      <a href="wallet.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">💰</span>
+        <p class="mt-3 text-white font-semibold">Wallet</p>
+      </a>
+
+      <a href="ledger.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">📒</span>
+        <p class="mt-3 text-white font-semibold">Ledger</p>
+      </a>
+
+      <a href="profile.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">👤</span>
+        <p class="mt-3 text-white font-semibold">Profile</p>
+      </a>
+
+      <a href="pan.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">🪪</span>
+        <p class="mt-3 text-white font-semibold">PAN Card</p>
+      </a>
+
+      <a href="recharge.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">📱</span>
+        <p class="mt-3 text-white font-semibold">Recharge</p>
+      </a>
+
+      <a href="bill.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">🧾</span>
+        <p class="mt-3 text-white font-semibold">Bill Payment</p>
+      </a>
+
+      <a href="dth.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">📺</span>
+        <p class="mt-3 text-white font-semibold">DTH</p>
+      </a>
+
+      <a href="aeps.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">🆔</span>
+        <p class="mt-3 text-white font-semibold">AEPS</p>
+      </a>
+
+      <a href="money.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">🏦</span>
+        <p class="mt-3 text-white font-semibold">Money Transfer</p>
+      </a>
+
+      <!-- Admin Panel -->
+      <a id="adminBtn" href="admin.html" class="hidden bg-red-600 shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+        <span class="text-4xl">👑</span>
+        <p class="mt-3 text-white font-bold">Admin Panel</p>
+      </a>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="text-center mt-8">
+      <button id="logoutBtn" class="bg-white/20 backdrop-blur-xl text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition">Logout</button>
+    </div>
   </div>
+
+  <!-- Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let adminUID = "0WU4cP36N1Zw9lLiT6igc2jwY523";
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("welcomeUser").textContent = "👋 Welcome, " + (user.email || "User");
+        if (user.uid === adminUID) {
+          document.getElementById("adminBtn").classList.remove("hidden");
+        }
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+
+    // Money Rain Animation
+    function createMoney() {
+      const money = document.createElement("div");
+      money.classList.add("money");
+      money.style.left = Math.random() * window.innerWidth + "px";
+      money.style.animationDuration = (3 + Math.random() * 3) + "s";
+      money.innerText = "💵"; // yaha note emoji use hua hai (chaho to image bhi daal sakte ho)
+      document.getElementById("rain").appendChild(money);
+
+      setTimeout(() => {
+        money.remove();
+      }, 6000);
+    }
+
+    setInterval(createMoney, 500); // har 0.5 sec me ek note girta rahega
+  </script>
 </body>
+</html>

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wallet & Transfer</title>
+  <title>My Wallet</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // 🔹 Firebase Config
+    // ✅ आपका Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
@@ -26,7 +26,6 @@
 
     let currentUser;
 
-    // 🔹 Auth Guard
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -36,86 +35,69 @@
       }
     });
 
-    // 🔹 Load Wallet Balance
     async function loadBalance() {
       const snap = await getDoc(doc(db, "users", currentUser.uid));
-      if (snap.exists()) {
-        document.getElementById("balance").textContent = "₹" + (snap.data().balance || 0);
-      }
+      document.getElementById("balance").textContent =
+        "₹ " + (snap.exists() ? snap.data().balance || 0 : 0);
     }
 
-    // 🔹 Wallet Transfer Function
-    window.doTransfer = async () => {
-      const receiverEmail = document.getElementById("receiver").value.trim();
-      const amount = parseFloat(document.getElementById("amount").value);
+    // 💰 Add Money
+    window.addMoney = async () => {
+      const amount = parseFloat(document.getElementById("addAmount").value);
+      const msg = document.getElementById("msg");
+      msg.textContent = "";
 
-      if (!receiverEmail || isNaN(amount) || amount <= 0) {
-        document.getElementById("msg").textContent = "⚠️ Please enter valid details.";
+      if (isNaN(amount) || amount <= 0) {
+        msg.textContent = "⚠️ Enter valid amount";
         return;
       }
 
       try {
-        const senderRef = doc(db, "users", currentUser.uid);
-        const senderSnap = await getDoc(senderRef);
+        const userRef = doc(db, "users", currentUser.uid);
 
-        if (!senderSnap.exists() || senderSnap.data().balance < amount) {
-          document.getElementById("msg").textContent = "❌ Insufficient balance.";
-          return;
-        }
+        // balance update
+        await updateDoc(userRef, { balance: increment(amount) });
 
-        // 🔹 Find Receiver by Email
-        const q = query(collection(db, "users"), where("email", "==", receiverEmail));
-        const snaps = await getDocs(q);
-        if (snaps.empty) {
-          document.getElementById("msg").textContent = "❌ Receiver not found.";
-          return;
-        }
-        const receiverDoc = snaps.docs[0];
-        const receiverRef = doc(db, "users", receiverDoc.id);
-
-        // 🔹 Deduct from Sender
-        await updateDoc(senderRef, { balance: increment(-amount) });
+        // ledger entry
         await addDoc(collection(db, "users", currentUser.uid, "ledger"), {
-          type: "debit",
-          amount,
-          note: `Wallet Transfer to ${receiverEmail}`,
+          type: "Credit",
+          amount: amount,
+          note: "Wallet Add Money",
+          status: "Success",
           ts: serverTimestamp()
         });
 
-        // 🔹 Add to Receiver
-        await updateDoc(receiverRef, { balance: increment(amount) });
-        await addDoc(collection(db, "users", receiverDoc.id, "ledger"), {
-          type: "credit",
-          amount,
-          note: `Wallet Received from ${currentUser.email}`,
-          ts: serverTimestamp()
-        });
-
-        document.getElementById("msg").textContent = `✅ ₹${amount} transferred to ${receiverEmail}`;
+        msg.textContent = "✅ Money added successfully!";
+        document.getElementById("addAmount").value = "";
         loadBalance();
-      } catch (err) {
-        document.getElementById("msg").textContent = "❌ " + err.message;
+      } catch (e) {
+        msg.textContent = "❌ " + e.message;
       }
-    }
+    };
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <div class="max-w-md mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-800 mb-4">My Wallet</h1>
-    <div class="bg-white shadow-md rounded-lg p-4 mb-4 text-center">
-      <p class="text-lg font-semibold">Current Balance</p>
-      <p id="balance" class="text-2xl font-bold text-green-600">₹0</p>
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">💼 My Wallet</h1>
+
+    <!-- Balance Display -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+      <h2 class="text-lg font-semibold">Current Balance</h2>
+      <p id="balance" class="text-2xl text-green-600">₹ 0</p>
     </div>
 
+    <!-- Add Money Section -->
     <div class="bg-white shadow-md rounded-lg p-4">
-      <h2 class="text-lg font-semibold mb-2">Wallet to Wallet Transfer</h2>
-      <input id="receiver" type="email" placeholder="Receiver Email" class="w-full border p-2 rounded mb-2"/>
-      <input id="amount" type="number" placeholder="Amount" class="w-full border p-2 rounded mb-2"/>
-      <button onclick="doTransfer()" class="w-full bg-blue-600 text-white p-2 rounded">Send Money</button>
+      <h2 class="text-lg font-bold mb-2">💰 Add Money</h2>
+      <input id="addAmount" type="number" placeholder="Enter amount" class="w-full border p-2 rounded mb-2"/>
+      <button onclick="addMoney()" class="w-full bg-green-600 text-white p-2 rounded">Add Money</button>
       <p id="msg" class="text-sm mt-2"></p>
     </div>
 
-    <p class="mt-4 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>
+    <p class="mt-4 text-sm text-center">
+      <a href="ledger.html" class="text-blue-600">📒 View Ledger</a> |
+      <a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a>
+    </p>
   </div>
 </body>
 </html>

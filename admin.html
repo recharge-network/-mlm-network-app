@@ -10,7 +10,7 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import { getFirestore, collection, getDocs, doc, updateDoc, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // 🔗 Firebase config
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
@@ -24,7 +24,8 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let adminUID = "PUT_ADMIN_UID_HERE"; // 👈 यहां अपने admin का UID डालना है (Firebase Console → Authentication से)
+    // ✅ आपका Admin UID
+    let adminUID = "0WU4cP36N1Zw9lLiT6igc2jwY523";
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) return window.location.href = "login.html";
@@ -33,7 +34,7 @@
       loadUsers();
     });
 
-    // सभी users लोड करो
+    // सभी users लोड करना
     async function loadUsers() {
       const tbody = document.getElementById("userBody");
       tbody.innerHTML = `<tr><td colspan="4" class="p-3 text-center">Loading...</td></tr>`;
@@ -75,7 +76,7 @@
       }
     };
 
-    // Ledger देखना
+    // Ledger view
     window.viewLedger = async (uid) => {
       localStorage.setItem("ledgerUser", uid);
       window.location.href = "transactions.html";

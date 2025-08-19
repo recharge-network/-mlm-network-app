@@ -15,8 +15,8 @@
       opacity: 0.9;
       animation: fall linear forwards;
       pointer-events: none;
+      z-index: 1;
     }
-
     @keyframes fall {
       to {
         transform: translateY(110vh) rotate(360deg);
@@ -37,57 +37,90 @@
       <p id="welcomeUser" class="mt-2 text-lg text-gray-200"></p>
     </div>
 
+    <!-- Wallet Balance Card -->
+    <div class="bg-white/20 backdrop-blur-xl shadow-xl rounded-2xl p-6 text-center mb-8">
+      <h2 class="text-xl font-bold text-white">💰 Wallet Balance</h2>
+      <p id="balanceAmt" class="text-3xl text-yellow-300 font-extrabold mt-2">₹ 0.00</p>
+    </div>
+
     <!-- Services Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
       
-      <!-- Service Card -->
-      <a href="wallet.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
-        <span class="text-4xl">💰</span>
+      <!-- Wallet -->
+      <a href="wallet.html" class="bg-green-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
+        <span class="text-4xl">💼</span>
         <p class="mt-3 text-white font-semibold">Wallet</p>
       </a>
 
-      <a href="ledger.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- Ledger -->
+      <a href="ledger.html" class="bg-yellow-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">📒</span>
         <p class="mt-3 text-white font-semibold">Ledger</p>
       </a>
 
-      <a href="profile.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- Profile -->
+      <a href="profile.html" class="bg-pink-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">👤</span>
         <p class="mt-3 text-white font-semibold">Profile</p>
       </a>
 
-      <a href="pan.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- PAN Card -->
+      <a href="pan.html" class="bg-purple-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">🪪</span>
         <p class="mt-3 text-white font-semibold">PAN Card</p>
       </a>
 
-      <a href="recharge.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- Recharge -->
+      <a href="recharge.html" class="bg-indigo-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">📱</span>
         <p class="mt-3 text-white font-semibold">Recharge</p>
       </a>
 
-      <a href="bill.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- Bill -->
+      <a href="bill.html" class="bg-blue-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">🧾</span>
-        <p class="mt-3 text-white font-semibold">Bill Payment</p>
+        <p class="mt-3 text-white font-semibold">Bill Pay</p>
       </a>
 
-      <a href="dth.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- DTH -->
+      <a href="dth.html" class="bg-red-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">📺</span>
         <p class="mt-3 text-white font-semibold">DTH</p>
       </a>
 
-      <a href="aeps.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- AEPS -->
+      <a href="aeps.html" class="bg-teal-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">🆔</span>
         <p class="mt-3 text-white font-semibold">AEPS</p>
       </a>
 
-      <a href="money.html" class="bg-white/20 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <!-- Money Transfer -->
+      <a href="money.html" class="bg-cyan-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">🏦</span>
         <p class="mt-3 text-white font-semibold">Money Transfer</p>
       </a>
 
+      <!-- Account Opening -->
+      <a href="account/account.html" class="bg-amber-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
+        <span class="text-4xl">🏦</span>
+        <p class="mt-3 text-white font-semibold">Open Account</p>
+        <p class="text-xs text-white mt-1">Indus | Axis | Yes</p>
+      </a>
+
+      <!-- Referral -->
+      <a href="referral.html" class="bg-fuchsia-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
+        <span class="text-4xl">🔗</span>
+        <p class="mt-3 text-white font-semibold">Referral</p>
+      </a>
+
+      <!-- More -->
+      <a href="more.html" class="bg-gray-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
+        <span class="text-4xl">➕</span>
+        <p class="mt-3 text-white font-semibold">More</p>
+      </a>
+
       <!-- Admin Panel -->
-      <a id="adminBtn" href="admin.html" class="hidden bg-red-600 shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105 hover:shadow-2xl">
+      <a id="adminBtn" href="admin.html" class="hidden bg-black/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center transition transform hover:scale-105">
         <span class="text-4xl">👑</span>
         <p class="mt-3 text-white font-bold">Admin Panel</p>
       </a>
@@ -103,6 +136,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
@@ -115,10 +149,11 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     let adminUID = "0WU4cP36N1Zw9lLiT6igc2jwY523";
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
       } else {
@@ -126,6 +161,15 @@
         if (user.uid === adminUID) {
           document.getElementById("adminBtn").classList.remove("hidden");
         }
+
+        // Load Wallet Balance
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          if (snap.exists()) {
+            const data = snap.data();
+            document.getElementById("balanceAmt").textContent = "₹ " + (data.balance || 0).toFixed(2);
+          }
+        } catch (e) {}
       }
     });
 
@@ -137,7 +181,9 @@
     // Money Rain Animation
     const notes = [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/India_new_100_INR%2C_MG_series%2C_2018%2C_obverse.jpg/320px-India_new_100_INR%2C_MG_series%2C_2018%2C_obverse.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg/320px-India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg/320px-India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/India_new_500_INR%2C_MG_series%2C_2016%2C_obverse.jpg/320px-India_new_500_INR%2C_MG_series%2C_2016%2C_obverse.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/India_new_50_INR%2C_MG_series%2C_2025%2C_obverse.jpg/320px-India_new_50_INR%2C_MG_series%2C_2025%2C_obverse.jpg"
     ];
 
     function createMoney() {
@@ -148,12 +194,10 @@
       money.style.animationDuration = (3 + Math.random() * 3) + "s";
       document.getElementById("rain").appendChild(money);
 
-      setTimeout(() => {
-        money.remove();
-      }, 6000);
+      setTimeout(() => { money.remove(); }, 6000);
     }
 
-    setInterval(createMoney, 400); // har 0.4 sec me ek note girta rahega
+    setInterval(createMoney, 400); // हर 0.4 सेकंड में एक note गिरेगा
   </script>
 </body>
 </html>

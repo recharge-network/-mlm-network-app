@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quick Transaction</title>
+  <title>User Ledger - Admin View</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, orderBy, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ आपका Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
@@ -24,87 +23,82 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let currentUser;
+    // ✅ Admin UID
+    let adminUID = "0WU4cP36N1Zw9lLiT6igc2jwY523";
 
-    // user login check
+    let targetUserId;
+
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
-        currentUser = user;
-        document.getElementById("welcome").textContent = "Welcome, " + (user.email || "");
-      }
-    });
+      if (!user) return window.location.href = "login.html";
+      if (user.uid !== adminUID) return window.location.href = "index.html"; // केवल admin access कर सके
 
-    // transaction submit
-    window.quickTxn = async () => {
-      const type = document.getElementById("type").value;
-      const ref = document.getElementById("ref").value.trim();
-      const amount = parseFloat(document.getElementById("amount").value);
-      const msg = document.getElementById("msg");
-      msg.textContent = "";
-
-      if (!type || !ref || isNaN(amount) || amount <= 0) {
-        msg.textContent = "⚠️ Fill all fields properly.";
+      targetUserId = localStorage.getItem("ledgerUser");
+      if (!targetUserId) {
+        document.getElementById("info").textContent = "⚠️ No user selected.";
         return;
       }
 
-      try {
-        const userRef = doc(db, "users", currentUser.uid);
-        const snap = await getDoc(userRef);
-        const bal = snap.exists() ? (snap.data().balance || 0) : 0;
+      loadUserInfo(targetUserId);
+      loadLedger(targetUserId);
+    });
 
-        if (bal < amount) {
-          msg.textContent = "❌ Insufficient balance.";
+    async function loadUserInfo(uid) {
+      const snap = await getDoc(doc(db, "users", uid));
+      if (snap.exists()) {
+        const d = snap.data();
+        document.getElementById("info").textContent = `📒 Ledger for: ${d.name || d.email || uid} (Balance: ₹ ${(d.balance || 0).toFixed(2)})`;
+      }
+    }
+
+    async function loadLedger(uid) {
+      const tbody = document.getElementById("ledgerBody");
+      tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center">Loading...</td></tr>`;
+      try {
+        const q = query(collection(db, "users", uid, "ledger"), orderBy("ts", "desc"));
+        const snap = await getDocs(q);
+        tbody.innerHTML = "";
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center">No transactions found</td></tr>`;
           return;
         }
-
-        // balance update
-        await updateDoc(userRef, { balance: increment(-amount) });
-
-        // ledger entry
-        await addDoc(collection(db, "users", currentUser.uid, "ledger"), {
-          type: type,
-          amount: amount,
-          note: ref,
-          status: "Success",
-          ts: serverTimestamp()
+        snap.forEach(docu => {
+          const d = docu.data();
+          const date = d.ts?.toDate().toLocaleString() || "";
+          tbody.innerHTML += `
+            <tr>
+              <td class="border p-2">${date}</td>
+              <td class="border p-2">${d.type || ""}</td>
+              <td class="border p-2">₹ ${(+d.amount || 0).toFixed(2)}</td>
+              <td class="border p-2">${d.note || ""}</td>
+              <td class="border p-2">${d.status || "Success"}</td>
+            </tr>`;
         });
-
-        msg.textContent = "✅ Transaction successful & saved to ledger.";
-        document.getElementById("ref").value = "";
-        document.getElementById("amount").value = "";
-        document.getElementById("type").selectedIndex = 0;
-
       } catch (e) {
-        msg.textContent = "❌ Error: " + e.message;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-red-600">Error: ${e.message}</td></tr>`;
       }
-    };
+    }
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <div class="max-w-md mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-800 mb-4">Quick Transaction</h1>
-    <p id="welcome" class="text-sm text-gray-600 mb-2"></p>
-    <div class="bg-white shadow-md rounded-lg p-4">
-      <select id="type" class="w-full border p-2 rounded mb-2">
-        <option value="">Select Type</option>
-        <option value="Recharge">📱 Recharge</option>
-        <option value="Bill">🧾 Bill Payment</option>
-        <option value="DTH">📺 DTH</option>
-        <option value="AEPS">🆔 AEPS</option>
-        <option value="Money Transfer">🏦 Money Transfer</option>
-        <option value="Wallet Transfer">👛 Wallet Transfer</option>
-      </select>
-      <input id="ref" type="text" placeholder="Reference (e.g., Mobile No, Account No, etc.)" class="w-full border p-2 rounded mb-2"/>
-      <input id="amount" type="number" placeholder="Amount" class="w-full border p-2 rounded mb-2"/>
-      <button onclick="quickTxn()" class="w-full bg-blue-600 text-white p-2 rounded">Submit</button>
-      <p id="msg" class="text-sm mt-2"></p>
+  <div class="max-w-5xl mx-auto p-4">
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">👑 Admin - User Ledger</h1>
+    <p id="info" class="mb-4 text-gray-700"></p>
+    <div class="bg-white shadow rounded overflow-hidden">
+      <table class="w-full border-collapse">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="border p-2">Date</th>
+            <th class="border p-2">Type</th>
+            <th class="border p-2">Amount</th>
+            <th class="border p-2">Note</th>
+            <th class="border p-2">Status</th>
+          </tr>
+        </thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
     </div>
-
     <p class="mt-4 text-sm text-center">
-      <a href="ledger.html" class="text-blue-600">📒 View Ledger</a> | 
-      <a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a>
+      <a href="admin.html" class="text-blue-600">⬅ Back to Admin Panel</a>
     </p>
   </div>
 </body>

@@ -1,9 +1,36 @@
-<body class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 overflow-y-auto">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Money rain effect */
+    .money {
+      position: fixed;
+      top: -80px;
+      width: 80px;
+      height: auto;
+      opacity: 0.9;
+      animation: fall linear forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 overflow-y-auto">
 
   <!-- Rain Container -->
   <div id="rain"></div>
 
-  <div class="relative z-10 max-w-6xl w-full p-6 mx-auto pb-32">
+  <div class="relative z-10 max-w-6xl w-full p-6 mx-auto pb-24">
     <!-- Header -->
     <div class="text-center mb-8">
       <h1 class="text-4xl font-extrabold text-white drop-shadow-lg">📱 Smart Network Dashboard</h1>
@@ -18,14 +45,161 @@
 
     <!-- Services Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-      <!-- your service cards same रहेंगे -->
+      
+      <!-- Wallet -->
+      <a href="wallet.html" class="bg-green-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">💼</span>
+        <p class="mt-3 text-white font-semibold">Wallet</p>
+      </a>
+
+      <!-- Ledger -->
+      <a href="ledger.html" class="bg-yellow-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">📒</span>
+        <p class="mt-3 text-white font-semibold">Ledger</p>
+      </a>
+
+      <!-- Profile -->
+      <a href="profile.html" class="bg-pink-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">👤</span>
+        <p class="mt-3 text-white font-semibold">Profile</p>
+      </a>
+
+      <!-- PAN Card -->
+      <a href="pan.html" class="bg-purple-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">🪪</span>
+        <p class="mt-3 text-white font-semibold">PAN Card</p>
+      </a>
+
+      <!-- Recharge -->
+      <a href="recharge.html" class="bg-indigo-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">📱</span>
+        <p class="mt-3 text-white font-semibold">Recharge</p>
+      </a>
+
+      <!-- Bill -->
+      <a href="bill.html" class="bg-blue-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">🧾</span>
+        <p class="mt-3 text-white font-semibold">Bill Pay</p>
+      </a>
+
+      <!-- DTH -->
+      <a href="dth.html" class="bg-red-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">📺</span>
+        <p class="mt-3 text-white font-semibold">DTH</p>
+      </a>
+
+      <!-- AEPS -->
+      <a href="aeps.html" class="bg-teal-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">🆔</span>
+        <p class="mt-3 text-white font-semibold">AEPS</p>
+      </a>
+
+      <!-- Money Transfer -->
+      <a href="money.html" class="bg-cyan-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">🏦</span>
+        <p class="mt-3 text-white font-semibold">Money Transfer</p>
+      </a>
+
+      <!-- Account Opening -->
+      <a href="account/account.html" class="bg-amber-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">🏦</span>
+        <p class="mt-3 text-white font-semibold">Open Account</p>
+        <p class="text-xs text-white mt-1">Indus | Axis | Yes</p>
+      </a>
+
+      <!-- Referral -->
+      <a href="referral.html" class="bg-fuchsia-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">🔗</span>
+        <p class="mt-3 text-white font-semibold">Referral</p>
+      </a>
+
+      <!-- More -->
+      <a href="more.html" class="bg-gray-500/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">➕</span>
+        <p class="mt-3 text-white font-semibold">More</p>
+      </a>
+
+      <!-- Admin Panel -->
+      <a id="adminBtn" href="admin.html" class="hidden bg-black/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 flex flex-col items-center hover:scale-105 transition">
+        <span class="text-4xl">👑</span>
+        <p class="mt-3 text-white font-bold">Admin Panel</p>
+      </a>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="text-center mt-8 sticky bottom-4">
+      <button id="logoutBtn" class="bg-white/20 backdrop-blur-xl text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition">
+        Logout
+      </button>
     </div>
   </div>
 
-  <!-- ✅ Fixed Logout Button -->
-  <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-    <button id="logoutBtn" class="bg-white/20 backdrop-blur-xl text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition">
-      Logout
-    </button>
-  </div>
+  <!-- Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let adminUID = "0WU4cP36N1Zw9lLiT6igc2jwY523";
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("welcomeUser").textContent = "👋 Welcome, " + (user.email || "User");
+        if (user.uid === adminUID) {
+          document.getElementById("adminBtn").classList.remove("hidden");
+        }
+
+        // Load Wallet Balance
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          if (snap.exists()) {
+            const data = snap.data();
+            document.getElementById("balanceAmt").textContent = "₹ " + (data.balance || 0).toFixed(2);
+          }
+        } catch (e) {}
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+
+    // Money Rain Animation
+    const notes = [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/India_new_100_INR%2C_MG_series%2C_2018%2C_obverse.jpg/320px-India_new_100_INR%2C_MG_series%2C_2018%2C_obverse.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg/320px-India_new_200_INR%2C_MG_series%2C_2017%2C_obverse.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/India_new_500_INR%2C_MG_series%2C_2016%2C_obverse.jpg/320px-India_new_500_INR%2C_MG_series%2C_2016%2C_obverse.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/India_new_2000_INR%2C_MG_series%2C_2016%2C_obverse.jpg/320px-India_new_2000_INR%2C_MG_series%2C_2016%2C_obverse.jpg"
+    ];
+
+    function createMoney() {
+      const money = document.createElement("img");
+      money.src = notes[Math.floor(Math.random() * notes.length)];
+      money.classList.add("money");
+      money.style.left = Math.random() * window.innerWidth + "px";
+      money.style.animationDuration = (3 + Math.random() * 3) + "s";
+      document.getElementById("rain").appendChild(money);
+
+      setTimeout(() => { money.remove(); }, 6000);
+    }
+
+    setInterval(createMoney, 400); // हर 0.4 सेकंड में एक note गिरेगा
+  </script>
 </body>
+</html>

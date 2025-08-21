@@ -6,110 +6,70 @@
   <title>Mobile Recharge</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen">
-  <div class="max-w-md mx-auto bg-white shadow p-6 mt-10 rounded">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md">
     <h1 class="text-2xl font-bold text-blue-700 mb-4">📱 Mobile Recharge</h1>
 
-    <!-- Mobile Number -->
-    <label class="block mb-2 font-medium">Mobile Number</label>
-    <input id="number" type="text" placeholder="Enter mobile number" class="w-full border rounded p-2 mb-4"/>
+    <label class="block mb-2 font-semibold">Mobile Number</label>
+    <input id="mobile" type="text" class="border p-2 w-full rounded mb-3" placeholder="Enter Mobile Number"/>
 
-    <!-- Operator -->
-    <label class="block mb-2 font-medium">Operator</label>
-    <select id="operator" class="w-full border rounded p-2 mb-4">
+    <label class="block mb-2 font-semibold">Operator</label>
+    <select id="operator" class="border p-2 w-full rounded mb-3">
       <option value="A">Airtel</option>
-      <option value="V">Vodafone Idea (VI)</option>
-      <option value="BT">BSNL - Topup</option>
-      <option value="BR">BSNL - STV</option>
-      <option value="RC">JIO</option>
+      <option value="V">Vodafone Idea</option>
+      <option value="BT">BSNL Topup</option>
+      <option value="RC">Jio</option>
+      <option value="BR">BSNL STV</option>
     </select>
 
-    <!-- Amount -->
-    <label class="block mb-2 font-medium">Amount</label>
-    <input id="amount" type="number" placeholder="Enter amount" class="w-full border rounded p-2 mb-4"/>
+    <label class="block mb-2 font-semibold">Amount</label>
+    <input id="amount" type="number" class="border p-2 w-full rounded mb-4" placeholder="Enter Amount"/>
 
-    <!-- Recharge Button -->
-    <button onclick="doRecharge()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-      🔄 Recharge Now
-    </button>
+    <button onclick="doRecharge()" class="bg-blue-600 text-white w-full py-2 rounded font-bold">Recharge Now</button>
 
-    <!-- Message -->
     <p id="msg" class="mt-4 text-center text-sm"></p>
-
-    <p class="mt-6 text-sm text-center">
-      <a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a>
-    </p>
   </div>
 
-  <!-- Firebase + API Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-
-    // 🔥 Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
-      authDomain: "mlm-network-157e8.firebaseapp.com",
-      projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.firebasestorage.app",
-      messagingSenderId: "433192039581",
-      appId: "1:433192039581:web:42d02b965870e4a8969074"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    let currentUser;
-
-    // ✅ Login check
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
-        currentUser = user;
-      }
-    });
-
-    // ✅ Recharge Function
+  <script>
     async function doRecharge() {
-      const number = document.getElementById("number").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
       const operator = document.getElementById("operator").value;
       const amount = document.getElementById("amount").value.trim();
       const msg = document.getElementById("msg");
 
-      if (!number || !amount) {
-        msg.textContent = "⚠️ Please fill all fields.";
-        msg.className = "mt-4 text-center text-red-600";
+      if (!mobile || !amount) {
+        msg.textContent = "⚠️ Please enter all details.";
+        msg.className = "text-red-600 text-center mt-4";
         return;
       }
 
       msg.textContent = "⏳ Processing recharge...";
-      msg.className = "mt-4 text-center text-gray-600";
+      msg.className = "text-blue-600 text-center mt-4";
 
-      const orderId = "ORD" + Date.now(); // unique transaction ID
+      const orderid = "ORD" + Date.now(); // unique transaction ID
 
-      const url = `https://myrc.in/v3/recharge/api?username=501903&token=d25e1910be6a5d20780a7dd2f7ce796f&opcode=${operator}&number=${number}&amount=${amount}&orderid=${orderId}&format=json`;
+      const url = `https://myrc.in/v3/recharge/api?username=501903&token=d25e1910be6a5d20780a7dd2f7ce796f&opcode=${operator}&number=${mobile}&amount=${amount}&orderid=${orderid}&format=json`;
 
       try {
         const res = await fetch(url);
         const data = await res.json();
 
         if (data.status === "Success") {
-          msg.textContent = "✅ Recharge Success! TxID: " + data.txid;
-          msg.className = "mt-4 text-center text-green-600";
+          msg.textContent = "✅ Recharge Successful! TxID: " + data.txid;
+          msg.className = "text-green-600 text-center mt-4";
         } else if (data.status === "Pending") {
-          msg.textContent = "⏳ Recharge Pending. Please check later. OrderID: " + data.orderid;
-          msg.className = "mt-4 text-center text-yellow-600";
+          msg.textContent = "⏳ Recharge Pending... Please wait. TxID: " + data.txid;
+          msg.className = "text-yellow-600 text-center mt-4";
         } else {
           msg.textContent = "❌ Failed: " + data.message;
-          msg.className = "mt-4 text-center text-red-600";
+          msg.className = "text-red-600 text-center mt-4";
         }
-      } catch (e) {
-        msg.textContent = "⚠️ API Error: " + e.message;
-        msg.className = "mt-4 text-center text-red-600";
+      } catch (err) {
+        msg.textContent = "⚠️ Error: " + err.message;
+        msg.className = "text-red-600 text-center mt-4";
       }
     }
-
-    window.doRecharge = doRecharge;
   </script>
 </body>
 </html>

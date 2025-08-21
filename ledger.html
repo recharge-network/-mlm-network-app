@@ -10,6 +10,7 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+    // 🔗 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
@@ -23,11 +24,13 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // ✅ Auth Check
     onAuthStateChanged(auth, async (user) => {
       if (!user) return (window.location.href = "login.html");
       loadLedger(user.uid);
     });
 
+    // ✅ Load Ledger History
     async function loadLedger(uid) {
       const tbody = document.getElementById("ledgerBody");
       tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center">Loading...</td></tr>`;
@@ -43,10 +46,10 @@
           const d = docu.data();
           const date = d.ts?.toDate().toLocaleString() || "";
           tbody.innerHTML += `
-            <tr>
+            <tr class="hover:bg-gray-50">
               <td class="border p-2">${date}</td>
               <td class="border p-2">${d.type || ""}</td>
-              <td class="border p-2">₹ ${(+d.amount || 0).toFixed(2)}</td>
+              <td class="border p-2 text-green-600 font-bold">₹ ${(+d.amount || 0).toFixed(2)}</td>
               <td class="border p-2">${d.note || ""}</td>
               <td class="border p-2">${d.status || "Success"}</td>
             </tr>`;
@@ -74,7 +77,10 @@
         <tbody id="ledgerBody"></tbody>
       </table>
     </div>
-    <p class="mt-4 text-sm text-center"><a class="text-blue-600" href="index.html">⬅ Back to Dashboard</a></p>
+    <p class="mt-4 text-sm text-center">
+      <a class="text-blue-600" href="wallet.html">⬅ Back to Wallet</a> | 
+      <a class="text-blue-600" href="index.html">🏠 Dashboard</a>
+    </p>
   </div>
 </body>
 </html>

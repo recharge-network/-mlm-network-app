@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Referral & Team</title>
+  <title>Referral System</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, getDocs, query, where, setDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // 🔹 Firebase Config
+    // 🔗 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
       projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      storageBucket: "mlm-network-157e8.appspot.com",
       messagingSenderId: "433192039581",
       appId: "1:433192039581:web:42d02b965870e4a8969074"
     };
@@ -26,83 +26,80 @@
 
     let currentUser;
 
-    // 🔹 Auth Guard
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
-        currentUser = user;
-        showReferralLink();
-        loadTeam();
-      }
+      if (!user) return (window.location.href = "login.html");
+      currentUser = user;
+      document.getElementById("refLink").value = window.location.origin + "/signup.html?ref=" + user.uid;
+      loadReferrals();
     });
 
-    // 🔹 Show Referral Link
-    function showReferralLink() {
-      const link = `${window.location.origin}/signup.html?ref=${currentUser.uid}`;
-      document.getElementById("refLink").value = link;
-    }
+    // 🔹 Load My Referrals
+    async function loadReferrals() {
+      const tbody = document.getElementById("refBody");
+      tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center">Loading...</td></tr>`;
 
-    // 🔹 Copy Link
-    window.copyLink = () => {
-      const input = document.getElementById("refLink");
-      input.select();
-      document.execCommand("copy");
-      document.getElementById("msg").textContent = "✅ Referral link copied!";
-    }
-
-    // 🔹 Load Team Members
-    async function loadTeam() {
-      const tbody = document.getElementById("teamTable");
-      tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center">Loading...</td></tr>`;
-      const q = query(collection(db, "users"), where("referrer", "==", currentUser.uid));
-      const snaps = await getDocs(q);
-      tbody.innerHTML = "";
-      let i = 1;
-      snaps.forEach(docSnap => {
-        const data = docSnap.data();
-        const row = `
-          <tr class="border-b">
-            <td class="p-2">${i++}</td>
-            <td class="p-2">${data.name || "N/A"}</td>
-            <td class="p-2">${data.email || ""}</td>
-          </tr>`;
-        tbody.insertAdjacentHTML("beforeend", row);
-      });
-      if (tbody.innerHTML === "") {
-        tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center">No referrals yet.</td></tr>`;
+      try {
+        const q = query(collection(db, "users"), where("refBy", "==", currentUser.uid));
+        const snap = await getDocs(q);
+        tbody.innerHTML = "";
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center">No referrals yet</td></tr>`;
+          return;
+        }
+        let i = 1;
+        snap.forEach(docu => {
+          const d = docu.data();
+          tbody.innerHTML += `
+            <tr class="hover:bg-gray-50">
+              <td class="border p-2">${i++}</td>
+              <td class="border p-2">${d.name || "User"}</td>
+              <td class="border p-2">${d.email || ""}</td>
+            </tr>`;
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-red-600">Error: ${e.message}</td></tr>`;
       }
     }
+
+    // 🔹 Copy Referral Link
+    window.copyLink = () => {
+      const link = document.getElementById("refLink");
+      link.select();
+      document.execCommand("copy");
+      alert("✅ Referral link copied!");
+    };
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <div class="max-w-3xl mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-800 mb-4">Referral & Team</h1>
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">👥 My Referrals</h1>
 
-    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
-      <label class="block mb-2">Your Referral Link</label>
+    <!-- Referral Link -->
+    <div class="bg-white shadow rounded p-4 mb-4">
+      <label class="block font-semibold mb-2">Your Referral Link</label>
       <div class="flex">
-        <input id="refLink" type="text" readonly class="flex-grow border p-2 rounded-l"/>
+        <input id="refLink" type="text" readonly class="flex-1 border p-2 rounded-l"/>
         <button onclick="copyLink()" class="bg-blue-600 text-white px-4 rounded-r">Copy</button>
       </div>
-      <p id="msg" class="text-sm mt-2"></p>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg p-4">
-      <h2 class="text-lg font-semibold mb-2">My Team</h2>
-      <table class="w-full text-sm">
+    <!-- Referral List -->
+    <div class="bg-white shadow rounded overflow-hidden">
+      <table class="w-full border-collapse">
         <thead class="bg-gray-200">
           <tr>
-            <th class="p-2">#</th>
-            <th class="p-2 text-left">Name</th>
-            <th class="p-2 text-left">Email</th>
+            <th class="border p-2">#</th>
+            <th class="border p-2">Name</th>
+            <th class="border p-2">Email</th>
           </tr>
         </thead>
-        <tbody id="teamTable"></tbody>
+        <tbody id="refBody"></tbody>
       </table>
     </div>
 
-    <p class="mt-4 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>
+    <p class="mt-4 text-sm text-center">
+      <a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a>
+    </p>
   </div>
 </body>
 </html>

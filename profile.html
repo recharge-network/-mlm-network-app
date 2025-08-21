@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profile</title>
+  <title>My Profile</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
@@ -11,11 +11,12 @@
     import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
+    // 🔗 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
       authDomain: "mlm-network-157e8.firebaseapp.com",
       projectId: "mlm-network-157e8",
-      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      storageBucket: "mlm-network-157e8.appspot.com",
       messagingSenderId: "433192039581",
       appId: "1:433192039581:web:42d02b965870e4a8969074"
     };
@@ -30,114 +31,92 @@
     onAuthStateChanged(auth, async (user) => {
       if (!user) return (window.location.href = "login.html");
       currentUser = user;
-      await ensureUserDoc(user.uid, user.email);
       loadProfile();
     });
 
-    async function ensureUserDoc(uid, email) {
-      const uref = doc(db, "users", uid);
-      const snap = await getDoc(uref);
-      if (!snap.exists()) {
-        await setDoc(uref, { email, balance: 0 });
-      }
-    }
-
+    // 🔹 Load Profile Data
     async function loadProfile() {
       const snap = await getDoc(doc(db, "users", currentUser.uid));
-      const data = snap.data() || {};
-      document.getElementById("name").value = data.name || currentUser.displayName || "";
-      document.getElementById("email").value = currentUser.email || "";
-      if (data.photoURL) document.getElementById("avatar").src = data.photoURL;
-      if (data.qrURL) document.getElementById("qrImg").src = data.qrURL;
-      if (data.bannerURL) document.getElementById("bannerImg").src = data.bannerURL;
+      if (snap.exists()) {
+        const data = snap.data();
+        document.getElementById("name").value = data.name || "";
+        document.getElementById("phone").value = data.phone || "";
+        if (data.photoURL) document.getElementById("profilePic").src = data.photoURL;
+        if (data.qrURL) document.getElementById("qrPreview").src = data.qrURL;
+      }
+      document.getElementById("email").value = currentUser.email;
     }
 
-    // Save basic profile
-    window.saveBasic = async () => {
-      const name = document.getElementById("name").value.trim();
-      const msg = document.getElementById("msgBasic");
-      msg.textContent = "";
-      try {
-        await updateProfile(currentUser, { displayName: name });
-        await updateDoc(doc(db, "users", currentUser.uid), { name });
-        msg.textContent = "✅ Profile updated.";
-      } catch (e) {
-        msg.textContent = "❌ " + e.message;
-      }
+    // 🔹 Save Profile Info
+    window.saveProfile = async () => {
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      await updateDoc(doc(db, "users", currentUser.uid), { name, phone });
+      alert("✅ Profile Updated!");
     };
 
-    // Generic uploader
-    async function uploadAndSave(fileInputId, storagePath, fieldName, imgPreviewId, msgBoxId) {
-      const file = document.getElementById(fileInputId).files[0];
-      const msg = document.getElementById(msgBoxId);
-      msg.textContent = "";
-      if (!file) return (msg.textContent = "⚠️ Select a file first");
-      try {
-        const r = ref(storage, `${storagePath}/${currentUser.uid}_${Date.now()}_${file.name}`);
-        await uploadBytes(r, file);
-        const url = await getDownloadURL(r);
-        await updateDoc(doc(db, "users", currentUser.uid), { [fieldName]: url });
-        if (imgPreviewId) document.getElementById(imgPreviewId).src = url;
-        msg.textContent = "✅ Uploaded & saved.";
-      } catch (e) {
-        msg.textContent = "❌ " + e.message;
-      }
-    }
+    // 🔹 Upload Profile Picture
+    window.uploadPhoto = async () => {
+      const file = document.getElementById("photo").files[0];
+      if (!file) return alert("⚠️ Please select a photo");
+      const storageRef = ref(storage, `profiles/${currentUser.uid}/photo.jpg`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      await updateDoc(doc(db, "users", currentUser.uid), { photoURL: url });
+      document.getElementById("profilePic").src = url;
+      alert("✅ Profile Photo Updated!");
+    };
 
-    window.uploadAvatar = () => uploadAndSave("photo", "profile", "photoURL", "avatar", "msgPhoto");
-    window.uploadQR     = () => uploadAndSave("qr", "qr", "qrURL", "qrImg", "msgQR");
-    window.uploadBanner = () => uploadAndSave("banner", "banner", "bannerURL", "bannerImg", "msgBanner");
+    // 🔹 Upload QR Code
+    window.uploadQR = async () => {
+      const file = document.getElementById("qr").files[0];
+      if (!file) return alert("⚠️ Please select a QR code image");
+      const storageRef = ref(storage, `profiles/${currentUser.uid}/qr.png`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      await updateDoc(doc(db, "users", currentUser.uid), { qrURL: url });
+      document.getElementById("qrPreview").src = url;
+      alert("✅ QR Code Uploaded!");
+    };
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <div class="max-w-3xl mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-800 mb-4">👤 Profile</h1>
+  <div class="max-w-lg mx-auto p-4">
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">👤 My Profile</h1>
 
-    <!-- Basic -->
-    <div class="bg-white shadow rounded p-4 mb-4">
-      <h2 class="text-lg font-semibold mb-2">Basic Details</h2>
-      <div class="grid sm:grid-cols-2 gap-3">
-        <div>
-          <label class="text-sm">Name</label>
-          <input id="name" class="w-full border p-2 rounded" placeholder="Full Name"/>
-        </div>
-        <div>
-          <label class="text-sm">Email</label>
-          <input id="email" class="w-full border p-2 rounded bg-gray-100" disabled/>
-        </div>
-      </div>
-      <button onclick="saveBasic()" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-      <p id="msgBasic" class="text-sm mt-2"></p>
-    </div>
-
-    <!-- Avatar -->
-    <div class="bg-white shadow rounded p-4 mb-4">
-      <h2 class="text-lg font-semibold mb-2">Profile Image</h2>
-      <img id="avatar" src="" alt="avatar" class="w-24 h-24 rounded-full object-cover border mb-2"/>
+    <!-- Profile Picture -->
+    <div class="bg-white shadow rounded p-4 mb-4 text-center">
+      <img id="profilePic" src="https://via.placeholder.com/100" class="mx-auto rounded-full w-24 h-24 mb-2"/>
       <input id="photo" type="file" accept="image/*" class="mb-2"/>
-      <button onclick="uploadAvatar()" class="bg-green-600 text-white px-4 py-2 rounded">Upload</button>
-      <p id="msgPhoto" class="text-sm mt-2"></p>
+      <button onclick="uploadPhoto()" class="bg-blue-600 text-white px-3 py-1 rounded">Upload Photo</button>
     </div>
 
-    <!-- QR -->
+    <!-- Profile Form -->
     <div class="bg-white shadow rounded p-4 mb-4">
-      <h2 class="text-lg font-semibold mb-2">QR Code Image</h2>
-      <img id="qrImg" src="" alt="qr" class="w-32 h-32 object-contain border mb-2"/>
+      <label class="block font-semibold">Name</label>
+      <input id="name" type="text" class="w-full border p-2 rounded mb-2"/>
+
+      <label class="block font-semibold">Email</label>
+      <input id="email" type="text" disabled class="w-full border p-2 rounded mb-2 bg-gray-100"/>
+
+      <label class="block font-semibold">Phone</label>
+      <input id="phone" type="text" class="w-full border p-2 rounded mb-2"/>
+
+      <button onclick="saveProfile()" class="w-full bg-green-600 text-white p-2 rounded">Save Profile</button>
+    </div>
+
+    <!-- QR Upload -->
+    <div class="bg-white shadow rounded p-4 mb-4 text-center">
+      <h2 class="text-lg font-bold mb-2">📱 UPI QR Code</h2>
+      <img id="qrPreview" src="https://via.placeholder.com/150" class="mx-auto w-32 h-32 mb-2"/>
       <input id="qr" type="file" accept="image/*" class="mb-2"/>
-      <button onclick="uploadQR()" class="bg-green-600 text-white px-4 py-2 rounded">Upload</button>
-      <p id="msgQR" class="text-sm mt-2"></p>
+      <button onclick="uploadQR()" class="bg-purple-600 text-white px-3 py-1 rounded">Upload QR</button>
     </div>
 
-    <!-- Banner -->
-    <div class="bg-white shadow rounded p-4 mb-4">
-      <h2 class="text-lg font-semibold mb-2">Banner Image</h2>
-      <img id="bannerImg" src="" alt="banner" class="w-full h-32 object-cover border mb-2"/>
-      <input id="banner" type="file" accept="image/*" class="mb-2"/>
-      <button onclick="uploadBanner()" class="bg-green-600 text-white px-4 py-2 rounded">Upload</button>
-      <p id="msgBanner" class="text-sm mt-2"></p>
-    </div>
-
-    <p class="mt-2 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>
+    <!-- Back -->
+    <p class="mt-4 text-sm text-center">
+      <a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a>
+    </p>
   </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[2:22 am, 22/8/2025] noor A muzassam: <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -35,97 +35,140 @@
     }
     #msg {
       margin-top: 15px;
-      font-weight: bold;
-    }
-    /* Spinner style */
-    .spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #fff;
-      border-right: 3px solid #4CAF50;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      margin-left: 8px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
-</head>
-<body>
-  <h1>Apna Subsidy Recharge</h1>
-  <form id="rechargeForm">
-    <input type="text" id="mobile" placeholder="मोबाइल नंबर" required><br>
-    <select id="operator" required>
-      <option value="">ऑपरेटर चुनें</option>
-      <option value="1">Airtel</option>
-      <option value="2">Vodafone Idea</option>
-      <option value="3">BSNL</option>
-      <option value="4">Jio</option>
-    </select><br>
-    <input type="number" id="amount" placeholder="राशि" required><br>
-    <button type="submit" id="btnRecharge">
-      रिचार्ज करें
-      <span id="spinner" class="spinner" style="display:none;"></span>
-    </button>
-    <div id="msg"></div>
-  </form>
+      font-weight…
+[2:37 am, 22/8/2025] noor A muzassam: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mobile Recharge</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  <script>
-    const API_TOKEN = "1223f98a-dc6f-449c-81e2-1bca07bfc54e"; // Aapka Mrobotic Token
+    // 🔹 Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9KS6E7oWd2aNumYPRkTpCvl_Sqb1TZtE",
+      authDomain: "mlm-network-157e8.firebaseapp.com",
+      projectId: "mlm-network-157e8",
+      storageBucket: "mlm-network-157e8.firebasestorage.app",
+      messagingSenderId: "433192039581",
+      appId: "1:433192039581:web:42d02b965870e4a8969074"
+    };
 
-    document.getElementById("rechargeForm").addEventListener("submit", async function(e){
-      e.preventDefault();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
+    let currentUser;
+
+    // 🔹 Auth Guard
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+      }
+    });
+
+    // 🔹 Recharge Function
+    window.doRecharge = async () => {
       const mobile = document.getElementById("mobile").value.trim();
       const operator = document.getElementById("operator").value;
-      const amount = document.getElementById("amount").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
       const msg = document.getElementById("msg");
-      const spinner = document.getElementById("spinner");
       const btn = document.getElementById("btnRecharge");
+      const spinner = document.getElementById("spinner");
+      const btnText = document.getElementById("btnText");
 
-      if(!mobile || !operator || !amount){
-        msg.textContent = "⚠️ सभी विवरण भरें";
-        msg.style.color = "red";
+      if (!mobile || !operator || isNaN(amount) || amount <= 0) {
+        msg.textContent = "⚠️ Please fill all fields correctly.";
+        msg.className = "text-red-600";
         return;
       }
 
-      // Show spinner + disable button
-      spinner.style.display = "inline-block";
-      btn.disabled = true;
-      msg.textContent = "⏳ Processing recharge...";
-      msg.style.color = "blue";
-
-      const orderid = "ORD" + Date.now();
-
-      const url = https://mrobotics.in/api/recharge_get?api_token=${API_TOKEN}&mobile_no=${mobile}&amount=${amount}&company_id=${operator}&order_id=${orderid}&is_stv=false;
-
       try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(userRef);
+
+        if (!snap.exists() || snap.data().balance < amount) {
+          msg.textContent = "❌ Insufficient balance.";
+          msg.className = "text-red-600";
+          return;
+        }
+
+        // Button loading state
+        btn.disabled = true;
+        spinner.classList.remove("hidden");
+        btnText.textContent = "Please wait...";
+
+        // Deduct balance locally (Firestore)
+        await updateDoc(userRef, { balance: increment(-amount) });
+
+        // Save ledger entry
+        await addDoc(collection(db, "users", currentUser.uid, "ledger"), {
+          type: "debit",
+          amount,
+          note: Mobile Recharge: ${mobile} (${operator}),
+          ts: serverTimestamp()
+        });
+
+        // 🔹 Mrobotics API Call
+        const API_TOKEN = "1223f98a-dc6f-449c-81e2-1bca07bfc54e"; // Your token
+        const orderid = "ORD" + Date.now();
+
+        const url = https://mrobotics.in/api/recharge_get?api_token=${API_TOKEN}&mobile_no=${mobile}&amount=${amount}&company_id=${operator}&order_id=${orderid}&is_stv=false;
+
         const res = await fetch(url);
         const data = await res.json();
 
         if (data.status && data.status.toLowerCase() === "success") {
-          msg.textContent = "✅ Recharge Successful! TxID: " + data.tnx_id;
-          msg.style.color = "green";
+          msg.textContent = "✅ Recharge Successful! TxID: " + (data.tnx_id || orderid);
+          msg.className = "text-green-600";
         } else if (data.status && data.status.toLowerCase() === "pending") {
-          msg.textContent = "⏳ Recharge Pending... TxID: " + data.tnx_id;
-          msg.style.color = "orange";
+          msg.textContent = "⏳ Recharge Pending... TxID: " + (data.tnx_id || orderid);
+          msg.className = "text-yellow-600";
         } else {
           msg.textContent = "❌ Failed: " + (data.response || "Unknown error");
-          msg.style.color = "red";
+          msg.className = "text-red-600";
         }
-      } catch(err) {
-        msg.textContent = "⚠️ Error: " + err.message;
-        msg.style.color = "red";
+      } catch (err) {
+        msg.textContent = "❌ " + err.message;
+        msg.className = "text-red-600";
       }
 
-      // Hide spinner + enable button again
-      spinner.style.display = "none";
+      // Reset button state
       btn.disabled = false;
-    });
+      spinner.classList.add("hidden");
+      btnText.textContent = "Recharge";
+    }
   </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-md mx-auto p-4">
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">Mobile Recharge</h1>
+    <div class="bg-white shadow-md rounded-lg p-4">
+      <input id="mobile" type="text" placeholder="Mobile Number" class="w-full border p-2 rounded mb-2"/>
+      <select id="operator" class="w-full border p-2 rounded mb-2">
+        <option value="">Select Operator</option>
+        <option value="1">Airtel</option>
+        <option value="2">Jio</option>
+        <option value="3">Vodafone Idea</option>
+        <option value="4">BSNL</option>
+      </select>
+      <input id="amount" type="number" placeholder="Amount" class="w-full border p-2 rounded mb-2"/>
+      <button id="btnRecharge" onclick="doRecharge()" class="w-full bg-blue-600 text-white p-2 rounded flex items-center justify-center">
+        <span id="btnText">Recharge</span>
+        <svg id="spinner" class="animate-spin h-5 w-5 ml-2 hidden text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+      </button>
+      <p id="msg" class="text-sm mt-2"></p>
+    </div>
+    <p class="mt-4 text-sm text-center"><a href="index.html" class="text-blue-600">⬅ Back to Dashboard</a></p>
+  </div>
 </body>
 </html>

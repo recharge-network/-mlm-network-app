@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mobile Recharge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-blue-700 mb-4">📱 Mobile Recharge</h1>
+
+    <label class="block mb-2 font-semibold">Mobile Number</label>
+    <input id="mobile" type="text" class="border p-2 w-full rounded mb-3" placeholder="Enter Mobile Number"/>
+
+    <label class="block mb-2 font-semibold">Operator</label>
+    <select id="operator" class="border p-2 w-full rounded mb-3">
+      <option value="1">Airtel</option>
+      <option value="2">Vodafone Idea</option>
+      <option value="3">BSNL Topup</option>
+      <option value="4">Jio</option>
+      <option value="5">BSNL STV</option>
+    </select>
+
+    <label class="block mb-2 font-semibold">Amount</label>
+    <input id="amount" type="number" class="border p-2 w-full rounded mb-4" placeholder="Enter Amount"/>
+
+    <button onclick="doRecharge()" class="bg-blue-600 text-white w-full py-2 rounded font-bold">Recharge Now</button>
+
+    <p id="msg" class="mt-4 text-center text-sm"></p>
+  </div>
+
+  <script>
+    async function doRecharge() {
+      const mobile = document.getElementById("mobile").value.trim();
+      const operator = document.getElementById("operator").value;
+      const amount = document.getElementById("amount").value.trim();
+      const msg = document.getElementById("msg");
+
+      if (!mobile || !amount) {
+        msg.textContent = "⚠️ Please enter all details.";
+        msg.className = "text-red-600 text-center mt-4";
+        return;
+      }
+
+      msg.textContent = "⏳ Processing recharge...";
+      msg.className = "text-blue-600 text-center mt-4";
+
+      const orderid = "ORD" + Date.now(); // unique transaction ID
+      const apiToken = "1223f98a-dc6f-449c-81e2-1bca07bfc54e"; // <-- yaha apna real API token rakhiye
+
+      const url = https://mrobotics.in/api/recharge_get?api_token=${apiToken}&mobile_no=${mobile}&amount=${amount}&company_id=${operator}&order_id=${orderid}&is_stv=false;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.status && data.status.toLowerCase() === "success") {
+          msg.textContent = "✅ Recharge Successful! TxID: " + data.txid;
+          msg.className = "text-green-600 text-center mt-4";
+        } else if (data.status && data.status.toLowerCase() === "pending") {
+          msg.textContent = "⏳ Recharge Pending... TxID: " + data.txid;
+          msg.className = "text-yellow-600 text-center mt-4";
+        } else {
+          msg.textContent = "❌ Failed: " + (data.message || "Unknown error");
+          msg.className = "text-red-600 text-center mt-4";
+        }
+      } catch (err) {
+        msg.textContent = "⚠️ Error: " + err.message;
+        msg.className = "text-red-600 text-center mt-4";
+      }
+    }
+  </script>
+</body>
+</html>
